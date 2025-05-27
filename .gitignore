@@ -1,0 +1,6 @@
+.venv
+data/crsp_q_ccm_1.csv
+data/wrdsapps_finratio.csv
+
+__pycache__/
+.DS_store
