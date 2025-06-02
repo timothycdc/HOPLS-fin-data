@@ -14,8 +14,17 @@ header-includes:
   - \setlist[itemize,3]{label=*}
   - \usepackage[top=0.5in, bottom=0.7in, left=0.7in, right=0.7in]{geometry}
   - \setcounter{section}{1}
+  - \usepackage{framed}
+  - \usepackage{xcolor}
+  - \let\oldquote=\quote
+  - \let\endoldquote=\endquote
+  - \colorlet{shadecolor}{orange!15}
+  - \renewenvironment{quote}{\begin{shaded*}\begin{oldquote}}{\end{oldquote}\end{shaded*}}
 ---
 
+
+## Notation
+- We use $\mathcal{G}$ to usually denote the core tensor in a Tucker decomposition. Tensors are also underlined bold capital letters, e.g. $\underline{\mathbf{X}}$.
 
 ## Normal HOPLS
 **Recap: Original HOPLS Framework (Sequential Extraction of Component $r$)**
@@ -24,8 +33,8 @@ We have:
 
 $$
 \begin{aligned}
-   \underline{\mathbf{X}} &= \overline{\underline{\mathbf{G}}}\times_{1}\mathbf{T}\times_{2}\overline{\mathbf{P}}^{(1)}\times_3\cdots\times_{N}\overline{\mathbf{P}}^{(N-1)}+\underline{\mathbf{E}}_R, \\\\
-   \underline{\mathbf{Y}} &= \overline{\underline{\mathbf{D}}}\times_{1}\mathbf{T}\times_{2}\overline{\mathbf{Q}}^{(1)}\times_3\cdots\times_M\overline{\mathbf{Q}}^{(M-1)}+\underline{\mathbf{F}}_R,
+   \underline{\mathbf{X}} &= \mathcal{G}\times_{1}\mathbf{T}\times_{2}\overline{\mathbf{P}}^{(1)}\times_3\cdots\times_{N}\overline{\mathbf{P}}^{(N-1)}+\underline{\mathbf{E}}_R, \\\\
+   \underline{\mathbf{Y}} &= \mathcal{D}\times_{1}\mathbf{T}\times_{2}\overline{\mathbf{Q}}^{(1)}\times_3\cdots\times_M\overline{\mathbf{Q}}^{(M-1)}+\underline{\mathbf{F}}_R,
 \end{aligned}
 $$
 

@@ -28,3 +28,11 @@ Starting grid search (450 combinations)...
 [14/450] window_size=50, R=30, Ln=(1, 1), lambda=1e-06, alpha=0.5
   OK: mse=1.197362, r2=0.002524, dir_acc=0.552025
 [15/450] window_size=50, R=30, Ln=(1, 1), lambda=1e-06, alpha=1.0
+  OK: mse=1.197362, r2=0.002524, dir_acc=0.552025
+[16/450] window_size=50, R=30, Ln=(3, 3), lambda=1, alpha=0.1
+  OK: mse=1.228049, r2=-0.023040, dir_acc=0.534308
+[17/450] window_size=50, R=30, Ln=(3, 3), lambda=1, alpha=0.5
+  OK: mse=1.225354, r2=-0.020795, dir_acc=0.518560
+[18/450] window_size=50, R=30, Ln=(3, 3), lambda=1, alpha=1.0
+  OK: mse=1.217363, r2=-0.014138, dir_acc=0.521935
+[19/450] window_size=50, R=30, Ln=(3, 3), lambda=0.1, alpha=0.1
