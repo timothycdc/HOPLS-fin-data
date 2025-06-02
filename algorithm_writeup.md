@@ -1,3 +1,22 @@
+---
+title: "HOPLS-MILR Algorithm Documentation"
+toc: true
+toc_depth: 4
+numbersections: true
+header-includes:
+  - \usepackage{enumitem}
+  - \setlistdepth{20}
+  - \renewlist{itemize}{itemize}{20}
+  - \renewlist{enumerate}{enumerate}{20}
+  - \setlist[itemize]{label=$\cdot$}
+  - \setlist[itemize,1]{label=\textbullet}
+  - \setlist[itemize,2]{label=--}
+  - \setlist[itemize,3]{label=*}
+  - \usepackage[top=0.5in, bottom=0.7in, left=0.7in, right=0.7in]{geometry}
+  - \setcounter{section}{1}
+---
+
+
 ## Normal HOPLS
 **Recap: Original HOPLS Framework (Sequential Extraction of Component $r$)**
 
@@ -17,7 +36,7 @@ For each component $r$, operating on current residuals $\underline{\mathbf{E}}_r
     *   The goal is to maximise $\|\mathcal{G}_r\|^2_F \cdot \|\mathcal{D}_r\|^2_F$.
     *   Using Proposition 3.3, this is equivalent to maximising $\|\langle\mathcal{G}_r,\mathcal{D}_r\rangle_{\{1;1\}}\|^2_F$.
     *   Substituting the LS solutions for $\mathcal{G}_r, \mathcal{D}_r$ (from Proposition 3.1, assuming fixed $\mathbf{t}_r, \mathbf{P}_r^{(n)}, \mathbf{Q}_r^{(m)}$) into this, and using $\mathbf{t}_r^T\mathbf{t}_r=1$, leads to the objective (Eq. 14 in HOPLS paper):
-        $\max \left \|[\![ \langle\underline{\mathbf{E}}_r,\underline{\mathbf{F}}_r\rangle_{\{1;1\}}; \mathbf{P}_r^{(1)T},\ldots,\mathbf{P}_r^{(N-1)T},\mathbf{Q}_r^{(1)T},\ldots,\mathbf{Q}_r^{(M-1)T} ]\!] \right\|_F^{2}$
+        $$\max \left \|[\![ \langle\underline{\mathbf{E}}_r,\underline{\mathbf{F}}_r\rangle_{\{1;1\}}; \mathbf{P}_r^{(1)T},\ldots,\mathbf{P}_r^{(N-1)T},\mathbf{Q}_r^{(1)T},\ldots,\mathbf{Q}_r^{(M-1)T} ]\!] \right\|_F^{2}$$
     *   Let $\underline{\mathbf{C}}_r = \langle\underline{\mathbf{E}}_r,\underline{\mathbf{F}}_r\rangle_{\{1;1\}}$. The problem simplifies to:
         $$
         \max_{\{\mathbf{P}_r^{(n)}\},\{\mathbf{Q}_r^{(m)}\}}
@@ -107,7 +126,7 @@ Given:
 * A latent vector $\mathbf{t}\in\mathbb{R}^{I_1}$ with $\|\mathbf{t}\|_F=1$
 * A global regularisation parameter $\lambda > 0$
 * A weighting exponent $\alpha > 0$
-<!-- * A positive weight tensor $\underline{\mathbf{W}}_{\mathcal{G}} \in \mathbb{R}^{1 \times L_2 \times \cdots \times L_N}$ (where elements $w_{l_2,\ldots,l_N} \ge 0$) -->
+
 
 ### Problem
 
@@ -167,12 +186,12 @@ $$
 $$
 Taking the derivative of the objective with respect to $g_k$ and setting it to zero, we have:
 $$
-\begin{align*}
+\begin{aligned}
 \frac{\partial f(\mathbf{g})}{\partial g_k} = -2\left((x_{proj})_k - g_k\right) + 2\lambda w_k g_k &= 0 \\
  (x_{proj})_k - g_k + \lambda w_k g_k &= 0 \\
  (x_{proj})_k &= g_k (1 + \lambda w_k) \\
 \implies g_k &= \frac{1}{1 + \lambda w_k} (x_{proj})_k
-\end{align*}
+\end{aligned}
 $$
 This proves the element-wise solution. $\blacksquare$
 
@@ -183,8 +202,7 @@ This proves the element-wise solution. $\blacksquare$
 *   **Proposition 3.2:** Remains the same for the *unregularised* objective used to find the loadings via HOOI on $\underline{\mathbf{C}}_r$. If we tried choosing loadings $\mathbf{P}_r, \mathbf{Q}_r$ that maximise the norm of the *MILR-regularised* core tensor, the objective would be:
     $\max \left\| \mathcal{G}_{LS} \oslash (\mathbf{1} + \lambda_X \underline{\mathbf{W}}_{\mathcal{G}}) \right\|_F^2 \cdot \left\| \mathcal{D}_{LS} \oslash (\mathbf{1} + \lambda_Y \underline{\mathbf{W}}_{\mathcal{D}}) \right\|_F^2$
     (where $\oslash$ denotes Hadamard (element-wise) division).
-<!--     
-* This is no longer a simple maximisation of $\|\mathcal{G}_{LS}\|^2_F \cdot \|\mathcal{D}_{LS}\|^2_F$ if $\underline{\mathbf{W}}_{\mathcal{G}}$ and $\underline{\mathbf{W}}_{\mathcal{D}}$ are not constant tensors. Solving this directly for $\mathbf{P}_r, \mathbf{Q}_r$ would be much harder and would deviate from the standard HOOI approach on $\underline{\mathbf{C}}_r$. **Thus, we keep the original Proposition 2 and the HOOI on $\underline{\mathbf{C}}_r$ to find the loadings, and apply MILR subsequently.** -->
+
 *   **Proposition 3.3:** This algebraic property is unchanged.
 *   **Proposition 3.4 (Tensor-Matrix case for $\mathbf{t} = \mathbf{Yq}$):** Unchanged.
 
@@ -212,7 +230,7 @@ $$w_{l_2, \ldots, l_N} = \frac{1}{N-1} \sum_{j=1}^{N-1} \left( \frac{l_{j+1}}{L_
 
 
 
-## Algorithms with Mean Index-Weighted L2 Core Regularisation (HOPLS-MILR)
+## Algorithms For Mean Index-Weighted L2 Core Regularisation (HOPLS-MILR)
 
 ### Algorithm: HOPLS-MILR (Tensor $\underline{\mathbf{X}}$ and Tensor $\underline{\mathbf{Y}}$)
 
@@ -243,16 +261,16 @@ Convergence threshold $\varepsilon$.
             1. **IF** $\text{P}_\text{count} > 0$ **THEN**
                 1. For each element $(\mathcal{G}_{r,LS})_{1, idx_2, \ldots, idx_N}$ (where $1 \le idx_j \le L_j$):
                    $\text{P}_\text{count} = 0$
-                    1. **FOR** $j=1$ **TO** $\text{P}_\text{count}$ **DO** &emsp;&emsp; *(Iterating through $\mathbf{P}_r^{(1)}$ to $\mathbf{P}_r^{(N-1)}$)*
-                        1. $L_{current\_mode} = L_{j+1}$ &emsp; *(Rank for mode $j+2$ of $\underline{\mathbf{X}}$, corresponding to $\mathbf{P}_r^{(j)}$)*
-                        2. $idx_{current\_mode} = idx_{j+1}$ *&emsp;(Index for that mode in $\mathcal{G}_r$)*
+                    1. **FOR** $j=1$ **TO** $\text{P}_\text{count}$ **DO** $\quad$  *(Iterating through $\mathbf{P}_r^{(1)}$ to $\mathbf{P}_r^{(N-1)}$)*
+                        1. $L_{current\_mode} = L_{j+1}$ $\quad$  *(Rank for mode $j+2$ of $\underline{\mathbf{X}}$, corresponding to $\mathbf{P}_r^{(j)}$)*
+                        2. $idx_{current\_mode} = idx_{j+1}$ *$\quad$ (Index for that mode in $\mathcal{G}_r$)*
                         3. $\text{sum\_norm\_indices} \leftarrow \text{sum\_norm\_indices} + (idx_{current\_mode} / L_{current\_mode})^\alpha$
                     2. **END FOR**
                    3. $(\underline{\mathbf{W}}_{\mathcal{G},r})_{1, idx_2, \ldots, idx_N} \leftarrow (1/\text{P}_\text{count}) * \text{sum\_norm\_indices}$
-            2. **ELSE** (if $N=1$, $\mathcal{G}_r$ is scalar): $(\underline{\mathbf{W}}_{\mathcal{G},r})_1 \leftarrow 0$ &emsp; *(or 1, effectively making it standard ridge)*
+            2. **ELSE** (if $N=1$, $\mathcal{G}_r$ is scalar): $(\underline{\mathbf{W}}_{\mathcal{G},r})_1 \leftarrow 0$ $\quad$  *(or 1, effectively making it standard ridge)*
             3. **END IF**
         9.  **Calculate MILR Core Tensor $\mathcal{G}_r$:**
-           $\mathcal{G}_r \leftarrow \mathcal{G}_{r,LS} ./ (\mathbf{1} + \lambda_X * \underline{\mathbf{W}}_{\mathcal{G},r})$ &emsp;*(element-wise operations)*
+           $\mathcal{G}_r \leftarrow \mathcal{G}_{r,LS} ./ (\mathbf{1} + \lambda_X * \underline{\mathbf{W}}_{\mathcal{G},r})$ $\quad$ *(element-wise operations)*
         10. **Calculate $\mathcal{D}_{r,LS}$ and MILR $\mathcal{D}_r$ (analogously):**
             - $\mathcal{D}_{r,LS} \leftarrow \underline{\mathbf{F}}_r \times_1 \mathbf{t}_r^{T} \times_2 \mathbf{Q}_r^{(1)T} \ldots \times_M \mathbf{Q}_r^{(M-1)T}$
             - Construct $\underline{\mathbf{W}}_{\mathcal{D},r}$ based on indices of $\mathbf{Q}_r^{(m)}$ columns and ranks $K_m$.
@@ -304,7 +322,7 @@ The HOPLS paper suggests $\mathbf{t}_r \leftarrow ((\underline{\mathbf{E}}_r \ti
 
 **REQUIRE:** $\underline{\mathbf{X}}\in\mathbb{R}^{I_{1}\times\cdots\times I_{N}}, N\geq 2$ and $\mathbf{Y}\in\mathbb{R}^{I_{1}\times M}$. Number of latent vectors $R$. Ranks $\{L_{k}\}_{k=2}^N$.Convergence threshold $\varepsilon$.
 Global regularisation strengths $\lambda_X, \lambda_Y$. Weighting exponent $\alpha > 0$.
-<!-- (Original HOPLS paper says $N \ge 3$ for tensor-matrix, but $N=2$ means $\underline{\mathbf{X}}$ is a matrix, becoming standard PLS. The logic for $\mathcal{G}_r$ should hold for $N \ge 2$ if $\mathbf{P}^{(0)}$ is mode 2 loading). -->
+
 
 
 
