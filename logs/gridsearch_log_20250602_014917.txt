@@ -1,0 +1,4 @@
+Starting grid search (450 combinations)...
+[1/450] window_size=50, R=30, Ln=(1, 1), lambda=1, alpha=0.1
+  OK: mse=1.271901, r2=-0.059572, dir_acc=0.563273
+[2/450] window_size=50, R=30, Ln=(1, 1), lambda=1, alpha=0.5

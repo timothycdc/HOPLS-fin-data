@@ -37,6 +37,20 @@ def hopls_ridge_predictor(X_tr, y_tr, X_te, R=120, Ln=(8,8), epsilon=1e-9, alpha
     )
     return Y_pred.detach().cpu().numpy()
 
+def hopls_milr_predictor(X_tr, y_tr, X_te, R=120, Ln=(8,8), epsilon=1e-9, lambda_X=1e-3, lambda_Y=1e-3, alpha=1.0):
+    """
+    HOPLS + MILR predictor for a single rolling window.
+    """
+    import torch  # Ensure torch is available in this function's scope
+    from .hopls_new_new import HOPLS_MILR
+    model = HOPLS_MILR(R=R, Ln=list(Ln), epsilon=epsilon, lambda_X=lambda_X, lambda_Y=lambda_Y, alpha=alpha)
+    model.fit(torch.Tensor(X_tr), torch.Tensor(y_tr))
+    Y_pred, _, _ = model.predict(
+        torch.Tensor(X_te),
+        torch.Tensor(y_tr[: X_te.shape[0]])
+    )
+    return Y_pred.detach().cpu().numpy()
+
 def ridge_predictor(X_tr, y_tr, X_te, alpha=1.0):
     """
     Matrix‐mode Ridge predictor for a single rolling window.
@@ -226,7 +240,7 @@ class PredictionTestEngine:
         # precompute test indices once
         self.test_indices = list(range(self.train_start, self.T))
 
-    def run(
+    def run_window(
         self,
         method: str = "hopls",
         verbose: bool = False,
@@ -252,13 +266,15 @@ class PredictionTestEngine:
             "hopls": hopls_predictor,
             "ridge": ridge_predictor,
             "hopls_ridge": hopls_ridge_predictor,
-            "linear_regression": linear_regression_predictor
+            "linear_regression": linear_regression_predictor,
+            "hopls_milr": hopls_milr_predictor
         }
         mode_map = {
             "hopls": "tensor",
             "ridge": "matrix",
             "hopls_ridge": "tensor",
-            "linear_regression": "matrix"
+            "linear_regression": "matrix",
+            "hopls_milr": "tensor"
         }
         # add LightGBM mapping
         predictor_map["lightgbm"] = lightgbm_predictor
@@ -399,6 +415,58 @@ class PredictionTestEngine:
         if not hasattr(self, 'metrics'):
             raise RuntimeError("No metrics found. Run run() first.")
         return self.metrics
+
+    def run_comparison(
+        self,
+        methods_params: Dict[str, Dict[str, Any]],
+        n_jobs: int = 1,
+        verbose: bool = False,
+        series_indices: Optional[Sequence[int]] = None
+    ) -> Dict[str, Dict[str, Any]]:
+        """
+        Run and compare multiple prediction methods with given parameters, print metrics,
+        and plot actual vs predicted for specified series on subplots.
+        """
+        import matplotlib.pyplot as plt
+        results: Dict[str, Dict[str, Any]] = {}
+        for method, params in methods_params.items():
+            y_pred, y_true, times, metrics = self.run_window(
+                method=method,
+                verbose=verbose,
+                n_jobs=n_jobs,
+                **params
+            )
+            results[method] = {
+                'y_pred': y_pred,
+                'y_true': y_true,
+                'times': times,
+                'metrics': metrics
+            }
+            print(f"Metrics for {method}: {metrics}")
+        # default series indices to first two if not provided
+        if series_indices is None:
+            series_indices = [0, 1]
+        # plot comparisons in one figure per method
+        fig, axes = plt.subplots(
+            nrows=len(results),
+            ncols=1,
+            figsize=(12, 6 * len(results)),
+            sharex=True
+        )
+        if len(results) == 1:
+            axes = [axes]
+        for ax, (method, res) in zip(axes, results.items()):
+            y_pred = res['y_pred']
+            y_true = res['y_true']
+            times = res['times']
+            for idx in series_indices:
+                ax.plot(times, y_true[:, idx], label=f"Actual series {idx}")
+                ax.plot(times, y_pred[:, idx], '--', label=f"{method} predicted series {idx}")
+            ax.set_title(f"Comparison for {method}")
+            ax.legend()
+        plt.tight_layout()
+        plt.show()
+        return results
 
 
 # def run(
