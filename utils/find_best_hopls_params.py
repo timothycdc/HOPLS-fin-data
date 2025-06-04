@@ -53,11 +53,11 @@ def main():
     time_index_all = pd.to_datetime(Y_df.index[1:], format='%Y-%m')
 
     # Hyperparameter grid
-    window_sizes = [50, 60]
-    R_values = [30, 40, 50, 60, 70]
-    Ln_values = [(1,1), (3,3), (5,5)]
-    lambda_values = [1, 1e-1, 1e-3, 1e-5, 1e-6]
-    alpha_values = [0.1, 0.5, 1.0]
+    window_sizes = [30,40,50,60]
+    R_values = [10,20,30,50]
+    Ln_values = [(5,5),(10,10),(20,20),(30,30)]
+    lambda_values = [1, 1e-1, 1e-3]
+    alpha_values = [0.5, 1.5, 2.5, 4]
     configs = list(product(window_sizes, R_values, Ln_values, lambda_values, alpha_values))
 
     # Prepare logging
@@ -70,20 +70,26 @@ def main():
     start_time = time()
 
     results = []
+    epsilon = 1e-6
+    test_start_percentage = 0.65
+    print("Using epsilon:", epsilon, file=log_file)
+    print("Test start percentage:", test_start_percentage, file=log_file)
+    print('\n' ,file=log_file)
+    
     for idx, (window_size, R, Ln, lambda_val, alpha) in enumerate(configs, 1):
         print(f"[{idx}/{total}] window_size={window_size}, R={R}, Ln={Ln}, lambda={lambda_val}, alpha={alpha}", file=log_file)
         try:
             engine = PredictionTestEngine(
                 X_all, Y_all,
                 window_size=window_size,
-                train_start = int(0.90 * X_all.shape[0]),
+                train_start = int(test_start_percentage * X_all.shape[0]),
                 time_index=time_index_all
             )
             _, _, _, metrics = engine.run_window(
                 method="hopls_milr",
                 R=R,
                 Ln=Ln,
-                epsilon=1e-6,
+                epsilon=epsilon,
                 verbose=False,
                 n_jobs=1,
                 lambda_X=lambda_val,

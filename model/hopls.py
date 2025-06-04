@@ -1,3 +1,5 @@
+# from https://github.com/arthurdehgan/HOPLS/blob/master/hopls.py
+
 from itertools import product
 import tensorly as tl
 from tensorly.decomposition import tucker

@@ -1,3 +1,5 @@
+# Sped-up implementation of HOPLS, improved from https://github.com/arthurdehgan/HOPLS/blob/master/hopls.py
+
 from typing import List, Optional, Tuple, Union
 
 import numpy as np
@@ -6,6 +8,7 @@ import torch
 from tensorly import tucker_to_tensor, fold
 from tensorly.decomposition import tucker
 from tensorly.tenalg import kronecker, mode_dot, multi_mode_dot
+
 
 # Use PyTorch backend throughout
 tl.set_backend("pytorch")
@@ -55,7 +58,7 @@ class HOPLS:
     def __init__(
         self,
         R: int,
-        Ln: List[int],
+        Ln: Union[List[int], Tuple[int]],
         Km: Optional[List[int]] = None,
         metric: Optional[callable] = None,
         epsilon: float = 1e-6,
@@ -71,7 +74,7 @@ class HOPLS:
             epsilon : float           – deflation stopping threshold.
         """
         self.R = R
-        self.Ln = Ln
+        self.Ln = list(Ln)
         self.Km = Km 
         self.metric = metric or qsquared
         self.epsilon = epsilon
@@ -87,7 +90,7 @@ class HOPLS:
         """
         Special case when Y is a matrix (mode-2 tensor): Algorithm 2 in Zhao et al. (2012).
         """
-        # NEW: ensure data on correct device
+        # ensure data on correct device
         Er, Fr = X.clone().to(device), Y.clone().to(device)
         P: List[List[torch.Tensor]] = []
         Q: List[torch.Tensor] = []

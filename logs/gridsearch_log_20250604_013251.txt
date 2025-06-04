@@ -1,0 +1,12 @@
+Starting grid search (768 combinations)...
+Using epsilon: 1e-06
+Test start percentage: 0.65
+
+
+[1/768] window_size=30, R=10, Ln=(5, 5), lambda=1, alpha=0.5
+  OK: mse=1.040407, r2=-0.008414, dir_acc=0.485023
+[2/768] window_size=30, R=10, Ln=(5, 5), lambda=1, alpha=1.5
+  OK: mse=1.036275, r2=-0.004408, dir_acc=0.491436
+[3/768] window_size=30, R=10, Ln=(5, 5), lambda=1, alpha=2.5
+  OK: mse=1.035632, r2=-0.003785, dir_acc=0.494196
+[4/768] window_size=30, R=10, Ln=(5, 5), lambda=1, alpha=4

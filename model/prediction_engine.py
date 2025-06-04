@@ -9,7 +9,7 @@ from sklearn.linear_model import Ridge
 from .hopls_new import HOPLS as HOPLS_NEW  
 import torch
 
-def hopls_predictor(X_tr, y_tr, X_te, R=120, Ln=(8,8), epsilon=1e-9):
+def hopls_predictor(X_tr, y_tr, X_te, R=120, Ln=(8,8), epsilon=1e-9, print_shapes=False):
     """
     Tensor‐mode HOPLS predictor for a single rolling window.
     """
@@ -17,38 +17,66 @@ def hopls_predictor(X_tr, y_tr, X_te, R=120, Ln=(8,8), epsilon=1e-9):
     from .hopls_new import HOPLS as HOPLS_NEW
     model = HOPLS_NEW(R=R, Ln=list(Ln), epsilon=epsilon)
     model.fit(torch.Tensor(X_tr), torch.Tensor(y_tr))
-    Y_pred, _, _ = model.predict(
+    
+    try:
+        Y_pred, _, _ = model.predict(
         torch.Tensor(X_te),
         torch.Tensor(y_tr[: X_te.shape[0]])
     )
+    except:
+        X_te_tensor = torch.Tensor(X_te)
+        num_test, n_series = X_te_tensor.shape[0], X_te_tensor.shape[1]
+        y_init = torch.zeros((num_test, n_series), dtype=X_te_tensor.dtype)
+        Y_pred, _, _ = model.predict(
+            X_te_tensor,
+            y_init
+        )
     return Y_pred.detach().cpu().numpy()
 
-def hopls_ridge_predictor(X_tr, y_tr, X_te, R=120, Ln=(8,8), epsilon=1e-9, alpha=1.0):
+def hopls_ridge_predictor(X_tr, y_tr, X_te, R=120, Ln=(8,8), epsilon=1e-9, alpha=1.0, print_shapes=False):
     """
     HOPLS + Ridge predictor for a single rolling window.
     """
-    import torch  # Ensure torch is available in this function's scope
     from .hopls_new import HOPLS_RIDGE
     model = HOPLS_RIDGE(R=R, Ln=list(Ln), epsilon=epsilon, ridge=alpha)
     model.fit(torch.Tensor(X_tr), torch.Tensor(y_tr))
-    Y_pred, _, _ = model.predict(
+
+    try:
+        Y_pred, _, _ = model.predict(
         torch.Tensor(X_te),
         torch.Tensor(y_tr[: X_te.shape[0]])
     )
+    except:
+        X_te_tensor = torch.Tensor(X_te)
+        num_test, n_series = X_te_tensor.shape[0], X_te_tensor.shape[1]
+        y_init = torch.zeros((num_test, n_series), dtype=X_te_tensor.dtype)
+        Y_pred, _, _ = model.predict(
+            X_te_tensor,
+            y_init
+        )
     return Y_pred.detach().cpu().numpy()
 
-def hopls_milr_predictor(X_tr, y_tr, X_te, R=120, Ln=(8,8), epsilon=1e-9, lambda_X=1e-3, lambda_Y=1e-3, alpha=1.0):
+def hopls_milr_predictor(X_tr, y_tr, X_te, R=120, Ln=(8,8), epsilon=1e-9, lambda_X=1e-3, lambda_Y=1e-3, alpha=1.0, print_shapes=False):
     """
     HOPLS + MILR predictor for a single rolling window.
     """
-    import torch  # Ensure torch is available in this function's scope
     from .hopls_new_new import HOPLS_MILR
     model = HOPLS_MILR(R=R, Ln=list(Ln), epsilon=epsilon, lambda_X=lambda_X, lambda_Y=lambda_Y, alpha=alpha)
     model.fit(torch.Tensor(X_tr), torch.Tensor(y_tr))
-    Y_pred, _, _ = model.predict(
+
+    try:
+        Y_pred, _, _ = model.predict(
         torch.Tensor(X_te),
         torch.Tensor(y_tr[: X_te.shape[0]])
     )
+    except:
+        X_te_tensor = torch.Tensor(X_te)
+        num_test, n_series = X_te_tensor.shape[0], X_te_tensor.shape[1]
+        y_init = torch.zeros((num_test, n_series), dtype=X_te_tensor.dtype)
+        Y_pred, _, _ = model.predict(
+            X_te_tensor,
+            y_init
+        )
     return Y_pred.detach().cpu().numpy()
 
 def ridge_predictor(X_tr, y_tr, X_te, alpha=1.0):
@@ -261,6 +289,10 @@ class PredictionTestEngine:
         **method_kwargs :
             All other kwargs are forwarded to the predictor (e.g. R, Ln, epsilon or alpha)
         """
+        if verbose:
+            print(f"run_window: X_all shape {self.X_all.shape}, y_all shape {self.y_all.shape}")
+            print(f"run_window: window_size={self.window_size}, n_series={self.n_series}, n_features={self.n_features}")
+            print(f"run_window: number of test windows={len(self.test_indices)}")
         # map names to functions & modes
         predictor_map = {
             "hopls": hopls_predictor,
@@ -340,7 +372,151 @@ class PredictionTestEngine:
         self.time_index_test = time_index_test
         self.metrics = metrics
 
+        # if verbose tensor-mode, print HOPLS shapes for last window only
+        if verbose and mode == 'tensor':
+            # prepare last window data for shape inspection
+            last_t = self.test_indices[-1]
+            start = last_t - self.window_size
+            X_win = self.X_all[start:last_t]
+            y_win = self.y_all[start:last_t]
+            # instantiate and fit model once to inspect core tensor shapes
+            if method == 'hopls_milr':
+                from .hopls_new_new import HOPLS_MILR
+                model_ins = HOPLS_MILR(**{k: method_kwargs[k] for k in ['R', 'Ln', 'epsilon', 'lambda_X', 'lambda_Y', 'alpha']})
+            else:
+                from .hopls_new import HOPLS as HOPLS_INS
+                model_ins = HOPLS_INS(**{k: method_kwargs[k] for k in ['R', 'Ln', 'epsilon']})
+            import torch
+            model_ins.fit(torch.Tensor(X_win), torch.Tensor(y_win))
+            _print_hopls_shapes(model_ins)
+
         return y_pred_all, y_true_all, time_index_test, metrics
+
+    def run_split(
+        self,
+        train_split: float = 0.8,
+        method: str = "hopls",
+        verbose: bool = False,
+        **method_kwargs: Any
+    ) -> Tuple[np.ndarray, np.ndarray, Optional[Sequence], Dict[str, float]]:
+        """
+        Run predictions using a single train/test split instead of rolling windows.
+
+        Parameters
+        ----------
+        train_split : float
+            Proportion of data to use for training (e.g., 0.8 for 80% train, 20% test)
+        method : str
+            "hopls", "ridge", "hopls_ridge", "linear_regression", or "hopls_milr"
+        verbose : bool
+            Show progress information
+        **method_kwargs :
+            All other kwargs are forwarded to the predictor (e.g. R, Ln, epsilon or alpha)
+
+        Returns
+        -------
+        y_pred : np.ndarray
+            Predicted y values for test set, shape (n_test, n_series).
+        y_true : np.ndarray
+            True y values for test set, shape (n_test, n_series).
+        time_index_test : Sequence or None
+            Timestamps for test set.
+        metrics : Dict[str, float]
+            MSE, R2, and directional accuracy.
+        """
+        # map names to functions & modes
+        predictor_map = {
+            "hopls": hopls_predictor,
+            "ridge": ridge_predictor,
+            "hopls_ridge": hopls_ridge_predictor,
+            "linear_regression": linear_regression_predictor,
+            "hopls_milr": hopls_milr_predictor,
+            "lightgbm": lightgbm_predictor
+        }
+        mode_map = {
+            "hopls": "tensor",
+            "ridge": "matrix",
+            "hopls_ridge": "tensor",
+            "linear_regression": "matrix",
+            "hopls_milr": "tensor",
+            "lightgbm": "matrix"
+        }
+
+        if method not in predictor_map:
+            raise ValueError(f"Unknown method '{method}', available: {list(predictor_map.keys())}")
+        
+        predictor = predictor_map[method]
+        mode = mode_map[method]
+
+        # Calculate split point
+        split_idx = int(train_split * self.T)
+        if split_idx <= 0 or split_idx >= self.T:
+            raise ValueError(f"Invalid train_split {train_split}, results in split_idx={split_idx} for T={self.T}")
+
+        if verbose:
+            print(f"Using train/test split: {split_idx}/{self.T - split_idx} (train/test)")
+
+        # Split data
+        X_train = self.X_all[:split_idx]  # shape (train_size, n_series, n_features)
+        y_train = self.y_all[:split_idx]  # shape (train_size, n_series)
+        X_test = self.X_all[split_idx:]   # shape (test_size, n_series, n_features)
+        y_true = self.y_all[split_idx:]   # shape (test_size, n_series)
+
+        if mode == "matrix":
+            # flatten training data: (train_size * n_series) × n_features
+            X_tr = X_train.reshape(-1, self.n_features)
+            y_tr = y_train.reshape(-1)
+            # flatten test data: (test_size * n_series) × n_features
+            X_te = X_test.reshape(-1, self.n_features)
+            
+            if verbose:
+                print(f"Matrix mode: X_train shape {X_tr.shape}, y_train shape {y_tr.shape}")
+                print(f"Matrix mode: X_test shape {X_te.shape}")
+            
+            y_pred_flat = predictor(X_tr, y_tr, X_te, **method_kwargs)
+            # reshape back to (test_size, n_series)
+            y_pred = y_pred_flat.reshape(X_test.shape[0], X_test.shape[1])
+
+        else:  # tensor mode
+            if verbose:
+                print(f"Tensor mode: X_train shape {X_train.shape}, y_train shape {y_train.shape}")
+                print(f"Tensor mode: X_test shape {X_test.shape}")
+            
+            y_pred = predictor(X_train, y_train, X_test, **method_kwargs)
+            y_pred = np.asarray(y_pred)
+
+        # Time index for test set
+        time_index_test = (
+            self.time_index[split_idx:]
+            if self.time_index is not None else None
+        )
+
+        # Compute metrics
+        mse = mean_squared_error(y_true.ravel(), y_pred.ravel())
+        r2 = r2_score(y_true.ravel(), y_pred.ravel())
+        true_dir = np.sign(y_true.ravel())
+        pred_dir = np.sign(y_pred.ravel())
+        mask = true_dir != 0
+        directional_acc = (
+            np.mean(pred_dir[mask] == true_dir[mask])
+            if mask.any() else np.nan
+        )
+        metrics = {
+            "mse": mse,
+            "r2": r2,
+            "directional_accuracy": directional_acc
+        }
+
+        # Store for plotting
+        self.y_pred_all = y_pred
+        self.y_true_all = y_true
+        self.time_index_test = time_index_test
+        self.metrics = metrics
+
+        if verbose:
+            print(f"Split results - MSE: {mse:.6f}, R2: {r2:.6f}, Dir. Acc.: {directional_acc:.6f}")
+
+        return y_pred, y_true, time_index_test, metrics
 
     def _predict_single(
         self,
@@ -468,78 +644,34 @@ class PredictionTestEngine:
         plt.show()
         return results
 
-
-# def run(
-    #     self,
-    #     predictor: Callable,
-    #     verbose: bool = False,
-    #     **predictor_kwargs: Any
-    # ) -> Tuple[np.ndarray, np.ndarray, Optional[Sequence], Dict[str, float]]:
-    #     """
-    #     Run rolling-window predictions.
-
-    #     predictor signature:
-    #       - matrix mode: (X_train_mat, y_train_vec, X_test_mat, **kwargs) -> y_pred_vec
-    #       - tensor mode: (X_train_tensor, y_train_tensor, X_test_tensor, **kwargs) -> y_pred_tensor
-
-    #     Returns
-    #     -------
-    #     y_pred_all : np.ndarray
-    #         Predicted y values, shape (n_tests, n_series).
-    #     y_true_all : np.ndarray
-    #         True y values, shape (n_tests, n_series).
-    #     time_index_test : Sequence or None
-    #         Timestamps for test set, length n_tests.
-    #     metrics : Dict[str, float]
-    #         Overall MSE, R2, and directional accuracy.
-    #     """
-    #     preds = []
-    #     loop = self.test_indices
-    #     if verbose:
-    #         try:
-    #             loop = tqdm(loop, desc="Rolling prediction")
-    #         except ImportError:
-    #             print("tqdm not installed, running without progress bar.")
-    #     for t in loop:
-    #         start = t - self.window_size
-    #         end = t
-    #         X_win = self.X_all[start:end]  # shape (window_size, series, features)
-    #         y_win = self.y_all[start:end]  # shape (window_size, series)
-    #         if self.mode == 'matrix':
-    #             X_train_mat = X_win.reshape(-1, self.n_features)
-    #             y_train_vec = y_win.reshape(-1)
-    #             X_test_mat = self.X_all[t].reshape(self.n_series, self.n_features)
-    #             y_pred = predictor(X_train_mat, y_train_vec, X_test_mat, **predictor_kwargs)
-    #         elif self.mode == 'tensor':
-    #             X_train_tensor = X_win
-    #             y_train_tensor = y_win
-    #             X_test_tensor = self.X_all[t][np.newaxis, ...]
-    #             y_pred_tensor = predictor(X_train_tensor, y_train_tensor, X_test_tensor, **predictor_kwargs)
-    #             y_pred = np.asarray(y_pred_tensor).squeeze(0)
-    #         else:
-    #             raise ValueError("mode must be 'matrix' or 'tensor'")
-    #         preds.append(y_pred)
-
-    #     y_pred_all = np.stack(preds, axis=0)
-    #     y_true_all = self.y_all[self.test_indices]
-    #     time_index_test = None
-    #     if self.time_index is not None:
-    #         time_index_test = self.time_index[self.train_start:]
-
-    #     # compute metrics
-    #     mse = mean_squared_error(y_true_all.reshape(-1), y_pred_all.reshape(-1))
-    #     r2 = r2_score(y_true_all.reshape(-1), y_pred_all.reshape(-1))
-    #     # directional accuracy: proportion where sign matches (ignore zeros in true)
-    #     true_dir = np.sign(y_true_all.reshape(-1))
-    #     pred_dir = np.sign(y_pred_all.reshape(-1))
-    #     mask = true_dir != 0
-    #     directional_acc = np.mean(pred_dir[mask] == true_dir[mask]) if np.any(mask) else np.nan
-    #     metrics = {'mse': mse, 'r2': r2, 'directional_accuracy': directional_acc}
-
-    #     # store for plotting
-    #     self.y_pred_all = y_pred_all
-    #     self.y_true_all = y_true_all
-    #     self.time_index_test = time_index_test
-    #     self.metrics = metrics
-
-    #     return y_pred_all, y_true_all, time_index_test, metrics
+def _print_hopls_shapes(model):
+    """
+    Print key tensor shapes for HOPLS and HOPLS-MILR models.
+    """
+    # HOPLS / HOPLS-RIDGE
+    if hasattr(model, 'model'):
+        P_list, Q_mat, D, T_mat, W_mat = model.model
+        print(f"Components: {len(P_list)}")
+        print("P shapes per component:")
+        for i, Pr in enumerate(P_list):
+            print(f"  Comp {i}: {[tuple(p.shape) for p in Pr]}")
+        print(f"Q_mat shape: {tuple(Q_mat.shape)}, D shape: {tuple(D.shape)}")
+        print(f"T_mat shape: {tuple(T_mat.shape)}, W_mat shape: {tuple(W_mat.shape)}")
+        return
+    # HOPLS-MILR
+    if hasattr(model, 'P_r_all_components'):
+        P_all = model.P_r_all_components
+        G_all = model.G_r_all_components
+        Qr = model.Q_r_all_components
+        D = model.D_r_all_components
+        T = model.T_mat
+        W = model.W_mat
+        print(f"MILR components: {len(P_all)}")
+        for i, Pr in enumerate(P_all):
+            print(f"  P comp {i}: {[tuple(p.shape) for p in Pr]}")
+        print(f"G shapes: {[tuple(G.shape) for G in G_all]}")
+        print(f"Q shape: {tuple(Qr.shape)}")
+        print(f"D shape: {tuple(D.shape)}")
+        print(f"T_mat shape: {tuple(T.shape)}, W_mat shape: {tuple(W.shape)}")
+        return
+    print("No HOPLS model attributes found to print shapes.")
