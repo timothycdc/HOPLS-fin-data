@@ -15,7 +15,7 @@ tl.set_backend("pytorch")
 # Automatically use GPU if available
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # Set default dtype
-torch.set_default_dtype(torch.float64)
+torch.set_default_dtype(torch.float32)
 
 
 def matricize(data: torch.Tensor) -> torch.Tensor:

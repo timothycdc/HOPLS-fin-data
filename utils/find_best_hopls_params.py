@@ -53,11 +53,11 @@ def main():
     time_index_all = pd.to_datetime(Y_df.index[1:], format='%Y-%m')
 
     # Hyperparameter grid
-    window_sizes = [30,40,50,60]
-    R_values = [10,20,30,50]
-    Ln_values = [(5,5),(10,10),(20,20),(30,30)]
-    lambda_values = [1, 1e-1, 1e-3]
-    alpha_values = [0.5, 1.5, 2.5, 4]
+    window_sizes = [50,60]
+    R_values = [24,25,26]
+    Ln_values = [(25, 25)]
+    lambda_values = [0.5, 0.75, 1.0, 1.25, 1.5 ]
+    alpha_values = [0.07, 0.075, 0.08, 0.085]
     configs = list(product(window_sizes, R_values, Ln_values, lambda_values, alpha_values))
 
     # Prepare logging
@@ -70,8 +70,8 @@ def main():
     start_time = time()
 
     results = []
-    epsilon = 1e-6
-    test_start_percentage = 0.65
+    epsilon = 1e-8
+    test_start_percentage = 0.5
     print("Using epsilon:", epsilon, file=log_file)
     print("Test start percentage:", test_start_percentage, file=log_file)
     print('\n' ,file=log_file)

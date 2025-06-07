@@ -1,0 +1,388 @@
+Starting grid search (768 combinations)...
+Using epsilon: 1e-08
+Test start percentage: 0.5
+
+
+[1/768] window_size=50, R=12, Ln=(20, 20), lambda=0.1, alpha=0.03
+  OK: mse=0.892079, r2=-0.003102, dir_acc=0.509985
+[2/768] window_size=50, R=12, Ln=(20, 20), lambda=0.1, alpha=0.05
+  OK: mse=0.892124, r2=-0.003152, dir_acc=0.504622
+[3/768] window_size=50, R=12, Ln=(20, 20), lambda=0.1, alpha=0.5
+  OK: mse=0.897647, r2=-0.009362, dir_acc=0.492354
+[4/768] window_size=50, R=12, Ln=(20, 20), lambda=0.1, alpha=1
+  OK: mse=0.894230, r2=-0.005520, dir_acc=0.497547
+[5/768] window_size=50, R=12, Ln=(20, 20), lambda=0.5, alpha=0.03
+  OK: mse=0.896976, r2=-0.008607, dir_acc=0.495892
+[6/768] window_size=50, R=12, Ln=(20, 20), lambda=0.5, alpha=0.05
+  OK: mse=0.896658, r2=-0.008250, dir_acc=0.490072
+[7/768] window_size=50, R=12, Ln=(20, 20), lambda=0.5, alpha=0.5
+  OK: mse=0.892805, r2=-0.003918, dir_acc=0.489672
+[8/768] window_size=50, R=12, Ln=(20, 20), lambda=0.5, alpha=1
+  OK: mse=0.890452, r2=-0.001272, dir_acc=0.501084
+[9/768] window_size=50, R=12, Ln=(20, 20), lambda=0.8, alpha=0.03
+  OK: mse=0.894131, r2=-0.005409, dir_acc=0.491042
+[10/768] window_size=50, R=12, Ln=(20, 20), lambda=0.8, alpha=0.05
+  OK: mse=0.895746, r2=-0.007225, dir_acc=0.476549
+[11/768] window_size=50, R=12, Ln=(20, 20), lambda=0.8, alpha=0.5
+  OK: mse=0.889218, r2=0.000115, dir_acc=0.514664
+[12/768] window_size=50, R=12, Ln=(20, 20), lambda=0.8, alpha=1
+  OK: mse=0.888057, r2=0.001421, dir_acc=0.506333
+[13/768] window_size=50, R=12, Ln=(20, 20), lambda=1.0, alpha=0.03
+  OK: mse=0.889403, r2=-0.000093, dir_acc=0.515520
+[14/768] window_size=50, R=12, Ln=(20, 20), lambda=1.0, alpha=0.05
+  OK: mse=0.890625, r2=-0.001466, dir_acc=0.502568
+[15/768] window_size=50, R=12, Ln=(20, 20), lambda=1.0, alpha=0.5
+  OK: mse=0.892557, r2=-0.003638, dir_acc=0.507360
+[16/768] window_size=50, R=12, Ln=(20, 20), lambda=1.0, alpha=1
+  OK: mse=0.891406, r2=-0.002345, dir_acc=0.490129
+[17/768] window_size=50, R=12, Ln=(25, 25), lambda=0.1, alpha=0.03
+  OK: mse=0.896250, r2=-0.007791, dir_acc=0.500000
+[18/768] window_size=50, R=12, Ln=(25, 25), lambda=0.1, alpha=0.05
+  OK: mse=0.896006, r2=-0.007517, dir_acc=0.500285
+[19/768] window_size=50, R=12, Ln=(25, 25), lambda=0.1, alpha=0.5
+  OK: mse=0.894308, r2=-0.005608, dir_acc=0.509814
+[20/768] window_size=50, R=12, Ln=(25, 25), lambda=0.1, alpha=1
+  OK: mse=0.894919, r2=-0.006295, dir_acc=0.508844
+[21/768] window_size=50, R=12, Ln=(25, 25), lambda=0.5, alpha=0.03
+  OK: mse=0.889585, r2=-0.000296, dir_acc=0.513637
+[22/768] window_size=50, R=12, Ln=(25, 25), lambda=0.5, alpha=0.05
+  OK: mse=0.893977, r2=-0.005236, dir_acc=0.507589
+[23/768] window_size=50, R=12, Ln=(25, 25), lambda=0.5, alpha=0.5
+  OK: mse=0.889705, r2=-0.000432, dir_acc=0.505820
+[24/768] window_size=50, R=12, Ln=(25, 25), lambda=0.5, alpha=1
+  OK: mse=0.890724, r2=-0.001578, dir_acc=0.500399
+[25/768] window_size=50, R=12, Ln=(25, 25), lambda=0.8, alpha=0.03
+  OK: mse=0.890161, r2=-0.000945, dir_acc=0.510613
+[26/768] window_size=50, R=12, Ln=(25, 25), lambda=0.8, alpha=0.05
+  OK: mse=0.890903, r2=-0.001779, dir_acc=0.506391
+[27/768] window_size=50, R=12, Ln=(25, 25), lambda=0.8, alpha=0.5
+  OK: mse=0.890032, r2=-0.000800, dir_acc=0.513066
+[28/768] window_size=50, R=12, Ln=(25, 25), lambda=0.8, alpha=1
+  OK: mse=0.889378, r2=-0.000064, dir_acc=0.510955
+[29/768] window_size=50, R=12, Ln=(25, 25), lambda=1.0, alpha=0.03
+  OK: mse=0.888977, r2=0.000387, dir_acc=0.514835
+[30/768] window_size=50, R=12, Ln=(25, 25), lambda=1.0, alpha=0.05
+  OK: mse=0.888088, r2=0.001387, dir_acc=0.517973
+[31/768] window_size=50, R=12, Ln=(25, 25), lambda=1.0, alpha=0.5
+  OK: mse=0.892904, r2=-0.004029, dir_acc=0.501826
+[32/768] window_size=50, R=12, Ln=(25, 25), lambda=1.0, alpha=1
+  OK: mse=0.889820, r2=-0.000561, dir_acc=0.513580
+[33/768] window_size=50, R=12, Ln=(30, 30), lambda=0.1, alpha=0.03
+  OK: mse=0.893557, r2=-0.004763, dir_acc=0.503823
+[34/768] window_size=50, R=12, Ln=(30, 30), lambda=0.1, alpha=0.05
+  OK: mse=0.893956, r2=-0.005212, dir_acc=0.502625
+[35/768] window_size=50, R=12, Ln=(30, 30), lambda=0.1, alpha=0.5
+  OK: mse=0.898433, r2=-0.010246, dir_acc=0.497432
+[36/768] window_size=50, R=12, Ln=(30, 30), lambda=0.1, alpha=1
+  OK: mse=0.896435, r2=-0.008000, dir_acc=0.500799
+[37/768] window_size=50, R=12, Ln=(30, 30), lambda=0.5, alpha=0.03
+  OK: mse=0.891900, r2=-0.002900, dir_acc=0.492640
+[38/768] window_size=50, R=12, Ln=(30, 30), lambda=0.5, alpha=0.05
+  OK: mse=0.892627, r2=-0.003717, dir_acc=0.507646
+[39/768] window_size=50, R=12, Ln=(30, 30), lambda=0.5, alpha=0.5
+  OK: mse=0.891901, r2=-0.002901, dir_acc=0.513808
+[40/768] window_size=50, R=12, Ln=(30, 30), lambda=0.5, alpha=1
+  OK: mse=0.892913, r2=-0.004039, dir_acc=0.509243
+[41/768] window_size=50, R=12, Ln=(30, 30), lambda=0.8, alpha=0.03
+  OK: mse=0.891611, r2=-0.002575, dir_acc=0.489102
+[42/768] window_size=50, R=12, Ln=(30, 30), lambda=0.8, alpha=0.05
+  OK: mse=0.894758, r2=-0.006114, dir_acc=0.485621
+[43/768] window_size=50, R=12, Ln=(30, 30), lambda=0.8, alpha=0.5
+  OK: mse=0.893413, r2=-0.004602, dir_acc=0.489558
+[44/768] window_size=50, R=12, Ln=(30, 30), lambda=0.8, alpha=1
+  OK: mse=0.889383, r2=-0.000069, dir_acc=0.507303
+[45/768] window_size=50, R=12, Ln=(30, 30), lambda=1.0, alpha=0.03
+  OK: mse=0.891081, r2=-0.001979, dir_acc=0.489387
+[46/768] window_size=50, R=12, Ln=(30, 30), lambda=1.0, alpha=0.05
+  OK: mse=0.887588, r2=0.001948, dir_acc=0.518829
+[47/768] window_size=50, R=12, Ln=(30, 30), lambda=1.0, alpha=0.5
+  OK: mse=0.889575, r2=-0.000285, dir_acc=0.503937
+[48/768] window_size=50, R=12, Ln=(30, 30), lambda=1.0, alpha=1
+  OK: mse=0.888597, r2=0.000814, dir_acc=0.512267
+[49/768] window_size=50, R=15, Ln=(20, 20), lambda=0.1, alpha=0.03
+  OK: mse=0.891852, r2=-0.002846, dir_acc=0.510613
+[50/768] window_size=50, R=15, Ln=(20, 20), lambda=0.1, alpha=0.05
+  OK: mse=0.894190, r2=-0.005475, dir_acc=0.502796
+[51/768] window_size=50, R=15, Ln=(20, 20), lambda=0.1, alpha=0.5
+  OK: mse=0.900493, r2=-0.012563, dir_acc=0.492982
+[52/768] window_size=50, R=15, Ln=(20, 20), lambda=0.1, alpha=1
+  OK: mse=0.897061, r2=-0.008703, dir_acc=0.498231
+[53/768] window_size=50, R=15, Ln=(20, 20), lambda=0.5, alpha=0.03
+  OK: mse=0.895668, r2=-0.007137, dir_acc=0.509871
+[54/768] window_size=50, R=15, Ln=(20, 20), lambda=0.5, alpha=0.05
+  OK: mse=0.895930, r2=-0.007431, dir_acc=0.508673
+[55/768] window_size=50, R=15, Ln=(20, 20), lambda=0.5, alpha=0.5
+  OK: mse=0.894661, r2=-0.006005, dir_acc=0.492069
+[56/768] window_size=50, R=15, Ln=(20, 20), lambda=0.5, alpha=1
+  OK: mse=0.891243, r2=-0.002161, dir_acc=0.497604
+[57/768] window_size=50, R=15, Ln=(20, 20), lambda=0.8, alpha=0.03
+  OK: mse=0.891251, r2=-0.002171, dir_acc=0.514265
+[58/768] window_size=50, R=15, Ln=(20, 20), lambda=0.8, alpha=0.05
+  OK: mse=0.898729, r2=-0.010578, dir_acc=0.497375
+[59/768] window_size=50, R=15, Ln=(20, 20), lambda=0.8, alpha=0.5
+  OK: mse=0.892238, r2=-0.003280, dir_acc=0.506904
+[60/768] window_size=50, R=15, Ln=(20, 20), lambda=0.8, alpha=1
+  OK: mse=0.889064, r2=0.000289, dir_acc=0.502739
+[61/768] window_size=50, R=15, Ln=(20, 20), lambda=1.0, alpha=0.03
+  OK: mse=0.890987, r2=-0.001873, dir_acc=0.519913
+[62/768] window_size=50, R=15, Ln=(20, 20), lambda=1.0, alpha=0.05
+  OK: mse=0.889674, r2=-0.000397, dir_acc=0.517003
+[63/768] window_size=50, R=15, Ln=(20, 20), lambda=1.0, alpha=0.5
+  OK: mse=0.892701, r2=-0.003801, dir_acc=0.510270
+[64/768] window_size=50, R=15, Ln=(20, 20), lambda=1.0, alpha=1
+  OK: mse=0.892254, r2=-0.003298, dir_acc=0.495892
+[65/768] window_size=50, R=15, Ln=(25, 25), lambda=0.1, alpha=0.03
+  OK: mse=0.898630, r2=-0.010468, dir_acc=0.499486
+[66/768] window_size=50, R=15, Ln=(25, 25), lambda=0.1, alpha=0.05
+  OK: mse=0.898685, r2=-0.010530, dir_acc=0.493781
+[67/768] window_size=50, R=15, Ln=(25, 25), lambda=0.1, alpha=0.5
+  OK: mse=0.896352, r2=-0.007906, dir_acc=0.503481
+[68/768] window_size=50, R=15, Ln=(25, 25), lambda=0.1, alpha=1
+  OK: mse=0.897608, r2=-0.009318, dir_acc=0.502682
+[69/768] window_size=50, R=15, Ln=(25, 25), lambda=0.5, alpha=0.03
+  OK: mse=0.891339, r2=-0.002269, dir_acc=0.522823
+[70/768] window_size=50, R=15, Ln=(25, 25), lambda=0.5, alpha=0.05
+  OK: mse=0.888449, r2=0.000981, dir_acc=0.519913
+[71/768] window_size=50, R=15, Ln=(25, 25), lambda=0.5, alpha=0.5
+  OK: mse=0.889489, r2=-0.000189, dir_acc=0.508559
+[72/768] window_size=50, R=15, Ln=(25, 25), lambda=0.5, alpha=1
+  OK: mse=0.890154, r2=-0.000937, dir_acc=0.501712
+[73/768] window_size=50, R=15, Ln=(25, 25), lambda=0.8, alpha=0.03
+  OK: mse=0.892503, r2=-0.003577, dir_acc=0.514949
+[74/768] window_size=50, R=15, Ln=(25, 25), lambda=0.8, alpha=0.05
+  OK: mse=0.894914, r2=-0.006289, dir_acc=0.503994
+[75/768] window_size=50, R=15, Ln=(25, 25), lambda=0.8, alpha=0.5
+  OK: mse=0.890409, r2=-0.001223, dir_acc=0.514265
+[76/768] window_size=50, R=15, Ln=(25, 25), lambda=0.8, alpha=1
+  OK: mse=0.889923, r2=-0.000677, dir_acc=0.509129
+[77/768] window_size=50, R=15, Ln=(25, 25), lambda=1.0, alpha=0.03
+  OK: mse=0.888753, r2=0.000638, dir_acc=0.517117
+[78/768] window_size=50, R=15, Ln=(25, 25), lambda=1.0, alpha=0.05
+  OK: mse=0.889498, r2=-0.000199, dir_acc=0.521967
+[79/768] window_size=50, R=15, Ln=(25, 25), lambda=1.0, alpha=0.5
+  OK: mse=0.891867, r2=-0.002863, dir_acc=0.510613
+[80/768] window_size=50, R=15, Ln=(25, 25), lambda=1.0, alpha=1
+  OK: mse=0.889614, r2=-0.000329, dir_acc=0.513922
+[81/768] window_size=50, R=15, Ln=(30, 30), lambda=0.1, alpha=0.03
+  OK: mse=0.900164, r2=-0.012193, dir_acc=0.497375
+[82/768] window_size=50, R=15, Ln=(30, 30), lambda=0.1, alpha=0.05
+  OK: mse=0.897493, r2=-0.009190, dir_acc=0.500399
+[83/768] window_size=50, R=15, Ln=(30, 30), lambda=0.1, alpha=0.5
+  OK: mse=0.901431, r2=-0.013617, dir_acc=0.505135
+[84/768] window_size=50, R=15, Ln=(30, 30), lambda=0.1, alpha=1
+  OK: mse=0.898210, r2=-0.009995, dir_acc=0.504622
+[85/768] window_size=50, R=15, Ln=(30, 30), lambda=0.5, alpha=0.03
+  OK: mse=0.895816, r2=-0.007303, dir_acc=0.506790
+[86/768] window_size=50, R=15, Ln=(30, 30), lambda=0.5, alpha=0.05
+  OK: mse=0.893857, r2=-0.005101, dir_acc=0.507132
+[87/768] window_size=50, R=15, Ln=(30, 30), lambda=0.5, alpha=0.5
+  OK: mse=0.893575, r2=-0.004783, dir_acc=0.503423
+[88/768] window_size=50, R=15, Ln=(30, 30), lambda=0.5, alpha=1
+  OK: mse=0.891668, r2=-0.002639, dir_acc=0.507988
+[89/768] window_size=50, R=15, Ln=(30, 30), lambda=0.8, alpha=0.03
+  OK: mse=0.894624, r2=-0.005963, dir_acc=0.498402
+[90/768] window_size=50, R=15, Ln=(30, 30), lambda=0.8, alpha=0.05
+  OK: mse=0.897067, r2=-0.008710, dir_acc=0.494979
+[91/768] window_size=50, R=15, Ln=(30, 30), lambda=0.8, alpha=0.5
+  OK: mse=0.892933, r2=-0.004062, dir_acc=0.496348
+[92/768] window_size=50, R=15, Ln=(30, 30), lambda=0.8, alpha=1
+  OK: mse=0.889569, r2=-0.000279, dir_acc=0.505078
+[93/768] window_size=50, R=15, Ln=(30, 30), lambda=1.0, alpha=0.03
+  OK: mse=0.895606, r2=-0.007067, dir_acc=0.492582
+[94/768] window_size=50, R=15, Ln=(30, 30), lambda=1.0, alpha=0.05
+  OK: mse=0.887351, r2=0.002215, dir_acc=0.521397
+[95/768] window_size=50, R=15, Ln=(30, 30), lambda=1.0, alpha=0.5
+  OK: mse=0.891096, r2=-0.001995, dir_acc=0.506562
+[96/768] window_size=50, R=15, Ln=(30, 30), lambda=1.0, alpha=1
+  OK: mse=0.888179, r2=0.001284, dir_acc=0.518943
+[97/768] window_size=50, R=18, Ln=(20, 20), lambda=0.1, alpha=0.03
+  OK: mse=0.896213, r2=-0.007750, dir_acc=0.511982
+[98/768] window_size=50, R=18, Ln=(20, 20), lambda=0.1, alpha=0.05
+  OK: mse=0.898420, r2=-0.010232, dir_acc=0.502625
+[99/768] window_size=50, R=18, Ln=(20, 20), lambda=0.1, alpha=0.5
+  OK: mse=0.902409, r2=-0.014717, dir_acc=0.498859
+[100/768] window_size=50, R=18, Ln=(20, 20), lambda=0.1, alpha=1
+  OK: mse=0.898854, r2=-0.010719, dir_acc=0.502568
+[101/768] window_size=50, R=18, Ln=(20, 20), lambda=0.5, alpha=0.03
+  OK: mse=0.896709, r2=-0.008308, dir_acc=0.510898
+[102/768] window_size=50, R=18, Ln=(20, 20), lambda=0.5, alpha=0.05
+  OK: mse=0.895769, r2=-0.007250, dir_acc=0.507132
+[103/768] window_size=50, R=18, Ln=(20, 20), lambda=0.5, alpha=0.5
+  OK: mse=0.894342, r2=-0.005646, dir_acc=0.501712
+[104/768] window_size=50, R=18, Ln=(20, 20), lambda=0.5, alpha=1
+  OK: mse=0.891928, r2=-0.002931, dir_acc=0.503481
+[105/768] window_size=50, R=18, Ln=(20, 20), lambda=0.8, alpha=0.03
+  OK: mse=0.890223, r2=-0.001015, dir_acc=0.511754
+[106/768] window_size=50, R=18, Ln=(20, 20), lambda=0.8, alpha=0.05
+  OK: mse=0.893510, r2=-0.004710, dir_acc=0.510955
+[107/768] window_size=50, R=18, Ln=(20, 20), lambda=0.8, alpha=0.5
+  OK: mse=0.891377, r2=-0.002312, dir_acc=0.509928
+[108/768] window_size=50, R=18, Ln=(20, 20), lambda=0.8, alpha=1
+  OK: mse=0.888312, r2=0.001135, dir_acc=0.513808
+[109/768] window_size=50, R=18, Ln=(20, 20), lambda=1.0, alpha=0.03
+  OK: mse=0.889631, r2=-0.000349, dir_acc=0.525277
+[110/768] window_size=50, R=18, Ln=(20, 20), lambda=1.0, alpha=0.05
+  OK: mse=0.893934, r2=-0.005187, dir_acc=0.509072
+[111/768] window_size=50, R=18, Ln=(20, 20), lambda=1.0, alpha=0.5
+  OK: mse=0.892899, r2=-0.004023, dir_acc=0.503937
+[112/768] window_size=50, R=18, Ln=(20, 20), lambda=1.0, alpha=1
+  OK: mse=0.891489, r2=-0.002437, dir_acc=0.502739
+[113/768] window_size=50, R=18, Ln=(25, 25), lambda=0.1, alpha=0.03
+  OK: mse=0.901321, r2=-0.013493, dir_acc=0.504451
+[114/768] window_size=50, R=18, Ln=(25, 25), lambda=0.1, alpha=0.05
+  OK: mse=0.901350, r2=-0.013526, dir_acc=0.504165
+[115/768] window_size=50, R=18, Ln=(25, 25), lambda=0.1, alpha=0.5
+  OK: mse=0.898549, r2=-0.010376, dir_acc=0.505363
+[116/768] window_size=50, R=18, Ln=(25, 25), lambda=0.1, alpha=1
+  OK: mse=0.901257, r2=-0.013422, dir_acc=0.504907
+[117/768] window_size=50, R=18, Ln=(25, 25), lambda=0.5, alpha=0.03
+  OK: mse=0.894757, r2=-0.006113, dir_acc=0.530127
+[118/768] window_size=50, R=18, Ln=(25, 25), lambda=0.5, alpha=0.05
+  OK: mse=0.889453, r2=-0.000149, dir_acc=0.513295
+[119/768] window_size=50, R=18, Ln=(25, 25), lambda=0.5, alpha=0.5
+  OK: mse=0.890386, r2=-0.001197, dir_acc=0.513865
+[120/768] window_size=50, R=18, Ln=(25, 25), lambda=0.5, alpha=1
+  OK: mse=0.887684, r2=0.001841, dir_acc=0.507988
+[121/768] window_size=50, R=18, Ln=(25, 25), lambda=0.8, alpha=0.03
+  OK: mse=0.892681, r2=-0.003778, dir_acc=0.522196
+[122/768] window_size=50, R=18, Ln=(25, 25), lambda=0.8, alpha=0.05
+  OK: mse=0.892137, r2=-0.003166, dir_acc=0.512724
+[123/768] window_size=50, R=18, Ln=(25, 25), lambda=0.8, alpha=0.5
+  OK: mse=0.889916, r2=-0.000669, dir_acc=0.512838
+[124/768] window_size=50, R=18, Ln=(25, 25), lambda=0.8, alpha=1
+  OK: mse=0.888535, r2=0.000884, dir_acc=0.514949
+[125/768] window_size=50, R=18, Ln=(25, 25), lambda=1.0, alpha=0.03
+  OK: mse=0.889838, r2=-0.000581, dir_acc=0.509015
+[126/768] window_size=50, R=18, Ln=(25, 25), lambda=1.0, alpha=0.05
+  OK: mse=0.889261, r2=0.000067, dir_acc=0.531040
+[127/768] window_size=50, R=18, Ln=(25, 25), lambda=1.0, alpha=0.5
+  OK: mse=0.889440, r2=-0.000134, dir_acc=0.520027
+[128/768] window_size=50, R=18, Ln=(25, 25), lambda=1.0, alpha=1
+  OK: mse=0.886226, r2=0.003480, dir_acc=0.519286
+[129/768] window_size=50, R=18, Ln=(30, 30), lambda=0.1, alpha=0.03
+  OK: mse=0.899592, r2=-0.011549, dir_acc=0.504336
+[130/768] window_size=50, R=18, Ln=(30, 30), lambda=0.1, alpha=0.05
+  OK: mse=0.898321, r2=-0.010120, dir_acc=0.506562
+[131/768] window_size=50, R=18, Ln=(30, 30), lambda=0.1, alpha=0.5
+  OK: mse=0.902464, r2=-0.014779, dir_acc=0.509358
+[132/768] window_size=50, R=18, Ln=(30, 30), lambda=0.1, alpha=1
+  OK: mse=0.897676, r2=-0.009395, dir_acc=0.512096
+[133/768] window_size=50, R=18, Ln=(30, 30), lambda=0.5, alpha=0.03
+  OK: mse=0.898617, r2=-0.010453, dir_acc=0.507931
+[134/768] window_size=50, R=18, Ln=(30, 30), lambda=0.5, alpha=0.05
+  OK: mse=0.895694, r2=-0.007166, dir_acc=0.511355
+[135/768] window_size=50, R=18, Ln=(30, 30), lambda=0.5, alpha=0.5
+  OK: mse=0.893516, r2=-0.004718, dir_acc=0.504165
+[136/768] window_size=50, R=18, Ln=(30, 30), lambda=0.5, alpha=1
+  OK: mse=0.891164, r2=-0.002072, dir_acc=0.512039
+[137/768] window_size=50, R=18, Ln=(30, 30), lambda=0.8, alpha=0.03
+  OK: mse=0.898477, r2=-0.010295, dir_acc=0.503195
+[138/768] window_size=50, R=18, Ln=(30, 30), lambda=0.8, alpha=0.05
+  OK: mse=0.899878, r2=-0.011870, dir_acc=0.502682
+[139/768] window_size=50, R=18, Ln=(30, 30), lambda=0.8, alpha=0.5
+  OK: mse=0.894684, r2=-0.006031, dir_acc=0.495264
+[140/768] window_size=50, R=18, Ln=(30, 30), lambda=0.8, alpha=1
+  OK: mse=0.888772, r2=0.000617, dir_acc=0.511868
+[141/768] window_size=50, R=18, Ln=(30, 30), lambda=1.0, alpha=0.03
+  OK: mse=0.893085, r2=-0.004232, dir_acc=0.511640
+[142/768] window_size=50, R=18, Ln=(30, 30), lambda=1.0, alpha=0.05
+  OK: mse=0.888495, r2=0.000929, dir_acc=0.530754
+[143/768] window_size=50, R=18, Ln=(30, 30), lambda=1.0, alpha=0.5
+  OK: mse=0.892393, r2=-0.003455, dir_acc=0.509643
+[144/768] window_size=50, R=18, Ln=(30, 30), lambda=1.0, alpha=1
+  OK: mse=0.887309, r2=0.002262, dir_acc=0.521283
+[145/768] window_size=50, R=20, Ln=(20, 20), lambda=0.1, alpha=0.03
+  OK: mse=0.896694, r2=-0.008291, dir_acc=0.510613
+[146/768] window_size=50, R=20, Ln=(20, 20), lambda=0.1, alpha=0.05
+  OK: mse=0.899517, r2=-0.011465, dir_acc=0.507418
+[147/768] window_size=50, R=20, Ln=(20, 20), lambda=0.1, alpha=0.5
+  OK: mse=0.906944, r2=-0.019816, dir_acc=0.496691
+[148/768] window_size=50, R=20, Ln=(20, 20), lambda=0.1, alpha=1
+  OK: mse=0.903109, r2=-0.015504, dir_acc=0.499486
+[149/768] window_size=50, R=20, Ln=(20, 20), lambda=0.5, alpha=0.03
+  OK: mse=0.896931, r2=-0.008557, dir_acc=0.510213
+[150/768] window_size=50, R=20, Ln=(20, 20), lambda=0.5, alpha=0.05
+  OK: mse=0.894395, r2=-0.005706, dir_acc=0.513979
+[151/768] window_size=50, R=20, Ln=(20, 20), lambda=0.5, alpha=0.5
+  OK: mse=0.897056, r2=-0.008697, dir_acc=0.503024
+[152/768] window_size=50, R=20, Ln=(20, 20), lambda=0.5, alpha=1
+  OK: mse=0.894364, r2=-0.005671, dir_acc=0.505649
+[153/768] window_size=50, R=20, Ln=(20, 20), lambda=0.8, alpha=0.03
+  OK: mse=0.886998, r2=0.002613, dir_acc=0.523166
+[154/768] window_size=50, R=20, Ln=(20, 20), lambda=0.8, alpha=0.05
+  OK: mse=0.895065, r2=-0.006459, dir_acc=0.511640
+[155/768] window_size=50, R=20, Ln=(20, 20), lambda=0.8, alpha=0.5
+  OK: mse=0.892883, r2=-0.004005, dir_acc=0.508730
+[156/768] window_size=50, R=20, Ln=(20, 20), lambda=0.8, alpha=1
+  OK: mse=0.890436, r2=-0.001253, dir_acc=0.509529
+[157/768] window_size=50, R=20, Ln=(20, 20), lambda=1.0, alpha=0.03
+  OK: mse=0.892691, r2=-0.003789, dir_acc=0.512382
+[158/768] window_size=50, R=20, Ln=(20, 20), lambda=1.0, alpha=0.05
+  OK: mse=0.894533, r2=-0.005861, dir_acc=0.521226
+[159/768] window_size=50, R=20, Ln=(20, 20), lambda=1.0, alpha=0.5
+  OK: mse=0.894033, r2=-0.005298, dir_acc=0.509643
+[160/768] window_size=50, R=20, Ln=(20, 20), lambda=1.0, alpha=1
+  OK: mse=0.893248, r2=-0.004416, dir_acc=0.503195
+[161/768] window_size=50, R=20, Ln=(25, 25), lambda=0.1, alpha=0.03
+  OK: mse=0.905103, r2=-0.017746, dir_acc=0.507532
+[162/768] window_size=50, R=20, Ln=(25, 25), lambda=0.1, alpha=0.05
+  OK: mse=0.904371, r2=-0.016923, dir_acc=0.505592
+[163/768] window_size=50, R=20, Ln=(25, 25), lambda=0.1, alpha=0.5
+  OK: mse=0.903704, r2=-0.016174, dir_acc=0.506105
+[164/768] window_size=50, R=20, Ln=(25, 25), lambda=0.1, alpha=1
+  OK: mse=0.907263, r2=-0.020175, dir_acc=0.506619
+[165/768] window_size=50, R=20, Ln=(25, 25), lambda=0.5, alpha=0.03
+  OK: mse=0.895606, r2=-0.007067, dir_acc=0.524250
+[166/768] window_size=50, R=20, Ln=(25, 25), lambda=0.5, alpha=0.05
+  OK: mse=0.889284, r2=0.000041, dir_acc=0.509928
+[167/768] window_size=50, R=20, Ln=(25, 25), lambda=0.5, alpha=0.5
+  OK: mse=0.893342, r2=-0.004521, dir_acc=0.518316
+[168/768] window_size=50, R=20, Ln=(25, 25), lambda=0.5, alpha=1
+  OK: mse=0.891862, r2=-0.002857, dir_acc=0.506961
+[169/768] window_size=50, R=20, Ln=(25, 25), lambda=0.8, alpha=0.03
+  OK: mse=0.893738, r2=-0.004966, dir_acc=0.525334
+[170/768] window_size=50, R=20, Ln=(25, 25), lambda=0.8, alpha=0.05
+  OK: mse=0.892663, r2=-0.003758, dir_acc=0.520769
+[171/768] window_size=50, R=20, Ln=(25, 25), lambda=0.8, alpha=0.5
+  OK: mse=0.891027, r2=-0.001918, dir_acc=0.515634
+[172/768] window_size=50, R=20, Ln=(25, 25), lambda=0.8, alpha=1
+  OK: mse=0.892781, r2=-0.003891, dir_acc=0.505820
+[173/768] window_size=50, R=20, Ln=(25, 25), lambda=1.0, alpha=0.03
+  OK: mse=0.890995, r2=-0.001882, dir_acc=0.517631
+[174/768] window_size=50, R=20, Ln=(25, 25), lambda=1.0, alpha=0.05
+  OK: mse=0.889222, r2=0.000111, dir_acc=0.536118
+[175/768] window_size=50, R=20, Ln=(25, 25), lambda=1.0, alpha=0.5
+  OK: mse=0.886952, r2=0.002664, dir_acc=0.525106
+[176/768] window_size=50, R=20, Ln=(25, 25), lambda=1.0, alpha=1
+  OK: mse=0.888589, r2=0.000824, dir_acc=0.522081
+[177/768] window_size=50, R=20, Ln=(30, 30), lambda=0.1, alpha=0.03
+  OK: mse=0.909861, r2=-0.023096, dir_acc=0.503652
+[178/768] window_size=50, R=20, Ln=(30, 30), lambda=0.1, alpha=0.05
+  OK: mse=0.910194, r2=-0.023471, dir_acc=0.500856
+[179/768] window_size=50, R=20, Ln=(30, 30), lambda=0.1, alpha=0.5
+  OK: mse=0.908206, r2=-0.021235, dir_acc=0.506790
+[180/768] window_size=50, R=20, Ln=(30, 30), lambda=0.1, alpha=1
+  OK: mse=0.901298, r2=-0.013467, dir_acc=0.510270
+[181/768] window_size=50, R=20, Ln=(30, 30), lambda=0.5, alpha=0.03
+  OK: mse=0.899742, r2=-0.011718, dir_acc=0.513009
+[182/768] window_size=50, R=20, Ln=(30, 30), lambda=0.5, alpha=0.05
+  OK: mse=0.897804, r2=-0.009539, dir_acc=0.513751
+[183/768] window_size=50, R=20, Ln=(30, 30), lambda=0.5, alpha=0.5
+  OK: mse=0.897555, r2=-0.009259, dir_acc=0.504622
+[184/768] window_size=50, R=20, Ln=(30, 30), lambda=0.5, alpha=1
+  OK: mse=0.893915, r2=-0.005165, dir_acc=0.508787
+[185/768] window_size=50, R=20, Ln=(30, 30), lambda=0.8, alpha=0.03
+  OK: mse=0.896181, r2=-0.007714, dir_acc=0.512838
+[186/768] window_size=50, R=20, Ln=(30, 30), lambda=0.8, alpha=0.05
+  OK: mse=0.899378, r2=-0.011309, dir_acc=0.510099
+[187/768] window_size=50, R=20, Ln=(30, 30), lambda=0.8, alpha=0.5
+  OK: mse=0.893713, r2=-0.004939, dir_acc=0.498459
+[188/768] window_size=50, R=20, Ln=(30, 30), lambda=0.8, alpha=1
+  OK: mse=0.890352, r2=-0.001159, dir_acc=0.507988
+[189/768] window_size=50, R=20, Ln=(30, 30), lambda=1.0, alpha=0.03
+  OK: mse=0.895155, r2=-0.006560, dir_acc=0.525505
+[190/768] window_size=50, R=20, Ln=(30, 30), lambda=1.0, alpha=0.05
+  OK: mse=0.891016, r2=-0.001906, dir_acc=0.530640
+[191/768] window_size=50, R=20, Ln=(30, 30), lambda=1.0, alpha=0.5
+  OK: mse=0.891868, r2=-0.002864, dir_acc=0.512267
+[192/768] window_size=50, R=20, Ln=(30, 30), lambda=1.0, alpha=1

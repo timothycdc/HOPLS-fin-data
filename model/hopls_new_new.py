@@ -9,7 +9,7 @@ from typing import List, Optional, Tuple, Union
 # Use PyTorch backend
 tl.set_backend("pytorch")
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-torch.set_default_dtype(torch.float64)
+torch.set_default_dtype(torch.float32)
 
 
 def matricize_n(tensor: torch.Tensor, mode: int = 0) -> torch.Tensor:
@@ -52,12 +52,12 @@ def _construct_milr_weight_tensor(
     num_loading_matrices_for_core: N-1 for G, M-1 for D.
     """
     if num_loading_matrices_for_core == 0: 
-        return torch.zeros(core_shape, device=dev, dtype=torch.float64)
+        return torch.zeros(core_shape, device=dev, dtype=torch.float32)
 
     active_core_shape = core_shape[1:] # Modes corresponding to L2...LN or K2...KM
     
     if not active_core_shape: # Should only happen if core_shape is (1,) AND num_loading_matrices_for_core > 0 (inconsistent)
-        return torch.zeros(core_shape, device=dev, dtype=torch.float64)
+        return torch.zeros(core_shape, device=dev, dtype=torch.float32)
 
     # mesh_idx_grids will be a list of tensors, one for each active mode.
     # For a core (1,L2,L3), active_core_shape=(L2,L3).
@@ -68,11 +68,11 @@ def _construct_milr_weight_tensor(
     except RuntimeError as e: # Catches cases like empty active_core_shape for scalar with num_loading_matrices > 0
         if not active_core_shape and num_loading_matrices_for_core > 0:
              # This state indicates an issue, e.g. core_shape=(1,) but N-1 > 0
-            return torch.zeros(core_shape, device=dev, dtype=torch.float64)
+            return torch.zeros(core_shape, device=dev, dtype=torch.float32)
         raise e
 
 
-    sum_normalized_indices_powered = torch.zeros(active_core_shape, device=dev, dtype=torch.float64)
+    sum_normalized_indices_powered = torch.zeros(active_core_shape, device=dev, dtype=torch.float32)
 
     for i in range(num_loading_matrices_for_core):
         # i corresponds to the i-th loading matrix P^(i+1) or Q^(i+1) (0-indexed loop for P^(1)...P^(N-1))
