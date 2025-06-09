@@ -79,14 +79,17 @@ The standard HOPLS estimates the core tensor $\mathcal{G}_{LS} \in \mathbb{R}^{1
 $$ \min_{\mathcal{G}} ||\underline{\mathbf{X}} - \mathcal{G} \times_1 \mathbf{t} \times_2 \mathbf{P}^{(1)} \dots \times_N \mathbf{P}^{(N-1)}||_F^2 $$
 
 Where:
+
 - Predictor tensor: $\underline{\mathbf{X}} \in \mathbb{R}^{I_1 \times \dots \times I_N}$
 - Latent vector: $\mathbf{t} \in \mathbb{R}^{I_1}$, with $\mathbf{t}^\top\mathbf{t} = 1$ (orthonormal)
 - Loading matrices: $\mathbf{P}^{(n)} \in \mathbb{R}^{I_{n+1} \times L_{n+1}}$ for $n = 1, \dots, N-1$, each with orthonormal columns ($\mathbf{P}^{(n)\top}\mathbf{P}^{(n)} = \mathbf{I}$)
 - Target: Estimate the core tensor $\mathcal{G} \in \mathbb{R}^{1 \times L_2 \times \dots \times L_N}$
 
 
-The solution is (from Proposition 3.1 of the HOPLS paper):
-$$ \mathcal{G}_{LS} = \underline{\mathbf{X}} \times_1 \mathbf{t}^\top \times_2 \mathbf{P}^{(1)\top} \dots \times_N \mathbf{P}^{(N-1)\top} $$
+The original HOPLS solution is (from Proposition 3.1 of the HOPLS paper):
+$$ \mathcal{G}_{LS} = \underline{\mathbf{X}} \times_1 \mathbf{t}^\top \times_2 \mathbf{P}^{(1)\top} \dots \times_N \mathbf{P}^{(N-1)\top} $$ 
+
+However, ridge-regularising formulates the problem with an additional penalty term:
 
 **Ridge-Regularised Formulation (Proposition 3.1-R):**
 The objective function is modified to include an L2 penalty on the core tensor:
@@ -129,6 +132,7 @@ Steps 1 and 2 (finding loadings $\mathbf{P}_r, \mathbf{Q}_r$ and latent vector $
 Proposition 3.1 is a reworking of the original Proposition 3.1 from the HOPLS paper.
 
 Given:
+
 * A tensor $\underline{\mathbf{X}}\in \mathbb{R}^{I_1 \times \cdots \times I_N }$
 * Column orthonormal loading matrices $\mathbf{P}^{(n)}\in\mathbb{R}^{I_{n+1}\times L_{n+1}}, n=1,\ldots,N-1$
   * (where $\mathbf{P}^{(n)}$ corresponds to mode $n+1$ of $\underline{\mathbf{X}}$ and has $L_{n+1}$ columns)

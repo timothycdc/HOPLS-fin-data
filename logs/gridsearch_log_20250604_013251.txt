@@ -10,3 +10,45 @@ Test start percentage: 0.65
 [3/768] window_size=30, R=10, Ln=(5, 5), lambda=1, alpha=2.5
   OK: mse=1.035632, r2=-0.003785, dir_acc=0.494196
 [4/768] window_size=30, R=10, Ln=(5, 5), lambda=1, alpha=4
+  OK: mse=1.033544, r2=-0.001762, dir_acc=0.496956
+[5/768] window_size=30, R=10, Ln=(5, 5), lambda=0.1, alpha=0.5
+  OK: mse=1.036313, r2=-0.004446, dir_acc=0.487783
+[6/768] window_size=30, R=10, Ln=(5, 5), lambda=0.1, alpha=1.5
+  OK: mse=1.035526, r2=-0.003683, dir_acc=0.490705
+[7/768] window_size=30, R=10, Ln=(5, 5), lambda=0.1, alpha=2.5
+  OK: mse=1.033427, r2=-0.001648, dir_acc=0.494927
+[8/768] window_size=30, R=10, Ln=(5, 5), lambda=0.1, alpha=4
+  OK: mse=1.033739, r2=-0.001951, dir_acc=0.496875
+[9/768] window_size=30, R=10, Ln=(5, 5), lambda=0.001, alpha=0.5
+  OK: mse=1.035872, r2=-0.004018, dir_acc=0.486403
+[10/768] window_size=30, R=10, Ln=(5, 5), lambda=0.001, alpha=1.5
+  OK: mse=1.035897, r2=-0.004042, dir_acc=0.485997
+[11/768] window_size=30, R=10, Ln=(5, 5), lambda=0.001, alpha=2.5
+  OK: mse=1.035860, r2=-0.004007, dir_acc=0.485835
+[12/768] window_size=30, R=10, Ln=(5, 5), lambda=0.001, alpha=4
+  OK: mse=1.035890, r2=-0.004036, dir_acc=0.485591
+[13/768] window_size=30, R=10, Ln=(10, 10), lambda=1, alpha=0.5
+  OK: mse=1.038816, r2=-0.006871, dir_acc=0.480883
+[14/768] window_size=30, R=10, Ln=(10, 10), lambda=1, alpha=1.5
+  OK: mse=1.036104, r2=-0.004242, dir_acc=0.489325
+[15/768] window_size=30, R=10, Ln=(10, 10), lambda=1, alpha=2.5
+  OK: mse=1.034990, r2=-0.003163, dir_acc=0.489244
+[16/768] window_size=30, R=10, Ln=(10, 10), lambda=1, alpha=4
+  OK: mse=1.032024, r2=-0.000288, dir_acc=0.508239
+[17/768] window_size=30, R=10, Ln=(10, 10), lambda=0.1, alpha=0.5
+  OK: mse=1.039563, r2=-0.007595, dir_acc=0.503775
+[18/768] window_size=30, R=10, Ln=(10, 10), lambda=0.1, alpha=1.5
+  OK: mse=1.037051, r2=-0.005161, dir_acc=0.502557
+[19/768] window_size=30, R=10, Ln=(10, 10), lambda=0.1, alpha=2.5
+  OK: mse=1.035064, r2=-0.003235, dir_acc=0.507184
+[20/768] window_size=30, R=10, Ln=(10, 10), lambda=0.1, alpha=4
+  OK: mse=1.034803, r2=-0.002982, dir_acc=0.501583
+[21/768] window_size=30, R=10, Ln=(10, 10), lambda=0.001, alpha=0.5
+  OK: mse=1.038008, r2=-0.006089, dir_acc=0.503937
+[22/768] window_size=30, R=10, Ln=(10, 10), lambda=0.001, alpha=1.5
+  OK: mse=1.038178, r2=-0.006253, dir_acc=0.501908
+[23/768] window_size=30, R=10, Ln=(10, 10), lambda=0.001, alpha=2.5
+  OK: mse=1.038218, r2=-0.006291, dir_acc=0.501177
+[24/768] window_size=30, R=10, Ln=(10, 10), lambda=0.001, alpha=4
+  OK: mse=1.038192, r2=-0.006267, dir_acc=0.500771
+[25/768] window_size=30, R=10, Ln=(20, 20), lambda=1, alpha=0.5

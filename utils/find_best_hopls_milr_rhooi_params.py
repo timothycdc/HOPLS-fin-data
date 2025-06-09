@@ -1,3 +1,4 @@
+\
 import json
 import pandas as pd
 import numpy as np
@@ -52,32 +53,52 @@ def main():
     Y_all = np.nan_to_num(Y[1:, :])
     time_index_all = pd.to_datetime(Y_df.index[1:], format='%Y-%m')
 
-    # Hyperparameter grid
-    window_sizes = [60, 70, 80]
-    R_values = [15, 25, 40]
-    Ln_values = [(20, 20)]
-    lambda_values = [1, 2]
-    alpha_values = [0.03, 0.05, 0.5, 1]
-    configs = list(product(window_sizes, R_values, Ln_values, lambda_values, alpha_values))
+    # Hyperparameter grid for hopls_milr_rhooi
+    window_sizes = [50]
+    R_values = [15]
+    Ln_values = [(15, 15), (20, 20)]
+    lambda_XY_values = [0.075]  # For lambda_X and lambda_Y
+    alpha_values = [3, 5, 7]
+    lambda_P_factor_penalty_values = [0.001]
+    lambda_Q_factor_penalty_values = [0.001]
+    rhooi_n_iter_max_values = [100, 150]
+    rhooi_tol_values = [1e-08, 1e-09]
+
+    configs = list(product(
+        window_sizes, R_values, Ln_values, lambda_XY_values, alpha_values,
+        lambda_P_factor_penalty_values, lambda_Q_factor_penalty_values,
+        rhooi_n_iter_max_values, rhooi_tol_values
+    ))
 
     # Prepare logging
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    log_path = f"logs/gridsearch_log_{timestamp}.txt"
+    log_path = f"logs/gridsearch_hopls_milr_rhooi_log_{timestamp}.txt"
     log_file = open(log_path, 'w', buffering=1)  # line buffering
 
     total = len(configs)
-    print(f"Starting grid search ({total} combinations)...", file=log_file)
+    print(f"Starting grid search for hopls_milr_rhooi ({total} combinations)...", file=log_file)
     start_time = time()
 
     results = []
-    epsilon = 1e-6
-    test_start_percentage = 0.75
-    print("Using epsilon:", epsilon, file=log_file)
-    print("Test start percentage:", test_start_percentage, file=log_file)
-    print('\n' ,file=log_file)
+    epsilon = 1e-7 # Based on provided successful runs
+    test_start_percentage = 0.5 # Updated test_start_percentage
+    n_jobs_val = 7 # Defaulting to 7 as seen in notebook
+    rhooi_verbose_val = False # Defaulting to False for grid search
+
+    print(f"Using epsilon: {epsilon}", file=log_file)
+    print(f"Test start percentage: {test_start_percentage}", file=log_file)
+    print(f"Number of jobs for engine: {n_jobs_val}", file=log_file)
+    print(f"Rhooi verbose: {rhooi_verbose_val}", file=log_file)
+    print('\\n' ,file=log_file)
     
-    for idx, (window_size, R, Ln, lambda_val, alpha) in enumerate(configs, 1):
-        print(f"[{idx}/{total}] window_size={window_size}, R={R}, Ln={Ln}, lambda={lambda_val}, alpha={alpha}", file=log_file)
+    for idx, (
+        window_size, R, Ln, lambda_XY, alpha,
+        lambda_P_factor_penalty, lambda_Q_factor_penalty,
+        rhooi_n_iter_max, rhooi_tol
+    ) in enumerate(configs, 1):
+        print(f"[{idx}/{total}] window_size={window_size}, R={R}, Ln={Ln}, lambda_XY={lambda_XY}, alpha={alpha}, "
+              f"lambda_P_penalty={lambda_P_factor_penalty}, lambda_Q_penalty={lambda_Q_factor_penalty}, "
+              f"rhooi_n_iter_max={rhooi_n_iter_max}, rhooi_tol={rhooi_tol}", file=log_file)
         try:
             engine = PredictionTestEngine(
                 X_all, Y_all,
@@ -86,22 +107,31 @@ def main():
                 time_index=time_index_all
             )
             _, _, _, metrics = engine.run_window(
-                method="hopls_milr",
+                method="hopls_milr_rhooi",
                 R=R,
                 Ln=Ln,
                 epsilon=epsilon,
-                verbose=False,
-                n_jobs=1,
-                lambda_X=lambda_val,
-                lambda_Y=lambda_val,
-                alpha=alpha
+                verbose=False, # Keep verbose False for grid search, use True for individual runs
+                n_jobs=n_jobs_val,
+                lambda_X=lambda_XY,
+                lambda_Y=lambda_XY,
+                alpha=alpha,
+                lambda_P_factor_penalty=lambda_P_factor_penalty,
+                lambda_Q_factor_penalty=lambda_Q_factor_penalty,
+                rhooi_verbose=rhooi_verbose_val,
+                rhooi_n_iter_max=rhooi_n_iter_max,
+                rhooi_tol=rhooi_tol
             )
             res = {
                 'window_size': window_size,
                 'R': R,
                 'Ln': Ln,
-                'lambda': lambda_val,
+                'lambda_XY': lambda_XY,
                 'alpha': alpha,
+                'lambda_P_factor_penalty': lambda_P_factor_penalty,
+                'lambda_Q_factor_penalty': lambda_Q_factor_penalty,
+                'rhooi_n_iter_max': rhooi_n_iter_max,
+                'rhooi_tol': rhooi_tol,
                 'mse': metrics['mse'],
                 'r2': metrics['r2'],
                 'directional_accuracy': metrics['directional_accuracy'],
@@ -115,8 +145,12 @@ def main():
                 'window_size': window_size,
                 'R': R,
                 'Ln': Ln,
-                'lambda': lambda_val,
+                'lambda_XY': lambda_XY,
                 'alpha': alpha,
+                'lambda_P_factor_penalty': lambda_P_factor_penalty,
+                'lambda_Q_factor_penalty': lambda_Q_factor_penalty,
+                'rhooi_n_iter_max': rhooi_n_iter_max,
+                'rhooi_tol': rhooi_tol,
                 'status': 'error',
                 'error_message': str(e)
             }
@@ -124,10 +158,10 @@ def main():
             print(f"  ERROR: {e}", file=log_file)
 
     elapsed = time() - start_time
-    print(f"Grid search finished in {elapsed:.2f}s", file=log_file)
+    print(f"Grid search for hopls_milr_rhooi finished in {elapsed:.2f}s", file=log_file)
 
     # Save JSON results
-    json_path = f"logs/gridsearch_results_{timestamp}.json"
+    json_path = f"logs/gridsearch_hopls_milr_rhooi_results_{timestamp}.json"
     with open(json_path, 'w') as jf:
         json.dump(results, jf, indent=2)
     print(f"Results saved to {json_path}", file=log_file)

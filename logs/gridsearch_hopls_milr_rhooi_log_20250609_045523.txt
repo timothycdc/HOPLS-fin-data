@@ -1,0 +1,119 @@
+Starting grid search for hopls_milr_rhooi (108 combinations)...
+Using epsilon: 1e-07
+Test start percentage: 0.9
+Number of jobs for engine: 7
+Rhooi verbose: False
+\n
+[1/108] window_size=50, R=15, Ln=(15, 15), lambda_XY=0.075, alpha=3, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-07
+  OK: mse=1.230655, r2=-0.025211, dir_acc=0.453318
+[2/108] window_size=50, R=15, Ln=(15, 15), lambda_XY=0.075, alpha=3, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-08
+  OK: mse=1.222619, r2=-0.018516, dir_acc=0.460911
+[3/108] window_size=50, R=15, Ln=(15, 15), lambda_XY=0.075, alpha=3, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-09
+  OK: mse=1.220863, r2=-0.017054, dir_acc=0.465973
+[4/108] window_size=50, R=15, Ln=(15, 15), lambda_XY=0.075, alpha=3, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=150, rhooi_tol=1e-07
+  OK: mse=1.235716, r2=-0.029427, dir_acc=0.473847
+[5/108] window_size=50, R=15, Ln=(15, 15), lambda_XY=0.075, alpha=3, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=150, rhooi_tol=1e-08
+  OK: mse=1.218674, r2=-0.015230, dir_acc=0.480877
+[6/108] window_size=50, R=15, Ln=(15, 15), lambda_XY=0.075, alpha=3, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=150, rhooi_tol=1e-09
+  OK: mse=1.235662, r2=-0.029382, dir_acc=0.444319
+[7/108] window_size=50, R=15, Ln=(15, 15), lambda_XY=0.075, alpha=5, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-07
+  OK: mse=1.234178, r2=-0.028146, dir_acc=0.435321
+[8/108] window_size=50, R=15, Ln=(15, 15), lambda_XY=0.075, alpha=5, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-08
+  OK: mse=1.227194, r2=-0.022328, dir_acc=0.478065
+[9/108] window_size=50, R=15, Ln=(15, 15), lambda_XY=0.075, alpha=5, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-09
+  OK: mse=1.231492, r2=-0.025908, dir_acc=0.449381
+[10/108] window_size=50, R=15, Ln=(15, 15), lambda_XY=0.075, alpha=5, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=150, rhooi_tol=1e-07
+  OK: mse=1.238011, r2=-0.031339, dir_acc=0.448819
+[11/108] window_size=50, R=15, Ln=(15, 15), lambda_XY=0.075, alpha=5, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=150, rhooi_tol=1e-08
+  OK: mse=1.214384, r2=-0.011656, dir_acc=0.487627
+[12/108] window_size=50, R=15, Ln=(15, 15), lambda_XY=0.075, alpha=5, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=150, rhooi_tol=1e-09
+  OK: mse=1.248341, r2=-0.039945, dir_acc=0.410574
+[13/108] window_size=50, R=15, Ln=(15, 15), lambda_XY=0.075, alpha=7, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-07
+  OK: mse=1.214699, r2=-0.011919, dir_acc=0.489876
+[14/108] window_size=50, R=15, Ln=(15, 15), lambda_XY=0.075, alpha=7, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-08
+  OK: mse=1.193167, r2=0.006019, dir_acc=0.548369
+[15/108] window_size=50, R=15, Ln=(15, 15), lambda_XY=0.075, alpha=7, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-09
+  OK: mse=1.220480, r2=-0.016734, dir_acc=0.483971
+[16/108] window_size=50, R=15, Ln=(15, 15), lambda_XY=0.075, alpha=7, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=150, rhooi_tol=1e-07
+  OK: mse=1.210569, r2=-0.008478, dir_acc=0.510405
+[17/108] window_size=50, R=15, Ln=(15, 15), lambda_XY=0.075, alpha=7, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=150, rhooi_tol=1e-08
+  OK: mse=1.228020, r2=-0.023016, dir_acc=0.488470
+[18/108] window_size=50, R=15, Ln=(15, 15), lambda_XY=0.075, alpha=7, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=150, rhooi_tol=1e-09
+  OK: mse=1.224236, r2=-0.019864, dir_acc=0.448538
+[19/108] window_size=50, R=15, Ln=(20, 20), lambda_XY=0.075, alpha=3, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-07
+  OK: mse=1.188250, r2=0.010115, dir_acc=0.559618
+[20/108] window_size=50, R=15, Ln=(20, 20), lambda_XY=0.075, alpha=3, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-08
+  OK: mse=1.220293, r2=-0.016579, dir_acc=0.508999
+[21/108] window_size=50, R=15, Ln=(20, 20), lambda_XY=0.075, alpha=3, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-09
+  OK: mse=1.185863, r2=0.012103, dir_acc=0.574803
+[22/108] window_size=50, R=15, Ln=(20, 20), lambda_XY=0.075, alpha=3, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=150, rhooi_tol=1e-07
+  OK: mse=1.193954, r2=0.005363, dir_acc=0.534308
+[23/108] window_size=50, R=15, Ln=(20, 20), lambda_XY=0.075, alpha=3, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=150, rhooi_tol=1e-08
+  OK: mse=1.225303, r2=-0.020752, dir_acc=0.465411
+[24/108] window_size=50, R=15, Ln=(20, 20), lambda_XY=0.075, alpha=3, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=150, rhooi_tol=1e-09
+  OK: mse=1.214626, r2=-0.011858, dir_acc=0.490439
+[25/108] window_size=50, R=15, Ln=(20, 20), lambda_XY=0.075, alpha=5, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-07
+  OK: mse=1.214092, r2=-0.011413, dir_acc=0.498031
+[26/108] window_size=50, R=15, Ln=(20, 20), lambda_XY=0.075, alpha=5, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-08
+  OK: mse=1.203658, r2=-0.002721, dir_acc=0.513780
+[27/108] window_size=50, R=15, Ln=(20, 20), lambda_XY=0.075, alpha=5, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-09
+  OK: mse=1.216409, r2=-0.013343, dir_acc=0.486220
+[28/108] window_size=50, R=15, Ln=(20, 20), lambda_XY=0.075, alpha=5, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=150, rhooi_tol=1e-07
+  OK: mse=1.204521, r2=-0.003440, dir_acc=0.491001
+[29/108] window_size=50, R=15, Ln=(20, 20), lambda_XY=0.075, alpha=5, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=150, rhooi_tol=1e-08
+  OK: mse=1.190278, r2=0.008425, dir_acc=0.567210
+[30/108] window_size=50, R=15, Ln=(20, 20), lambda_XY=0.075, alpha=5, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=150, rhooi_tol=1e-09
+  OK: mse=1.199660, r2=0.000610, dir_acc=0.512092
+[31/108] window_size=50, R=15, Ln=(20, 20), lambda_XY=0.075, alpha=7, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-07
+  OK: mse=1.197554, r2=0.002364, dir_acc=0.543588
+[32/108] window_size=50, R=15, Ln=(20, 20), lambda_XY=0.075, alpha=7, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-08
+  OK: mse=1.209186, r2=-0.007326, dir_acc=0.504218
+[33/108] window_size=50, R=15, Ln=(20, 20), lambda_XY=0.075, alpha=7, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-09
+  OK: mse=1.199947, r2=0.000370, dir_acc=0.534589
+[34/108] window_size=50, R=15, Ln=(20, 20), lambda_XY=0.075, alpha=7, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=150, rhooi_tol=1e-07
+  OK: mse=1.192156, r2=0.006861, dir_acc=0.548650
+[35/108] window_size=50, R=15, Ln=(20, 20), lambda_XY=0.075, alpha=7, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=150, rhooi_tol=1e-08
+  OK: mse=1.199732, r2=0.000550, dir_acc=0.548650
+[36/108] window_size=50, R=15, Ln=(20, 20), lambda_XY=0.075, alpha=7, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=150, rhooi_tol=1e-09
+  OK: mse=1.189948, r2=0.008700, dir_acc=0.560461
+[37/108] window_size=50, R=20, Ln=(15, 15), lambda_XY=0.075, alpha=3, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-07
+  OK: mse=1.237142, r2=-0.030615, dir_acc=0.467379
+[38/108] window_size=50, R=20, Ln=(15, 15), lambda_XY=0.075, alpha=3, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-08
+  OK: mse=1.221746, r2=-0.017789, dir_acc=0.479471
+[39/108] window_size=50, R=20, Ln=(15, 15), lambda_XY=0.075, alpha=3, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-09
+  OK: mse=1.218358, r2=-0.014967, dir_acc=0.490439
+[40/108] window_size=50, R=20, Ln=(15, 15), lambda_XY=0.075, alpha=3, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=150, rhooi_tol=1e-07
+  OK: mse=1.236536, r2=-0.030110, dir_acc=0.475816
+[41/108] window_size=50, R=20, Ln=(15, 15), lambda_XY=0.075, alpha=3, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=150, rhooi_tol=1e-08
+  OK: mse=1.212337, r2=-0.009951, dir_acc=0.503093
+[42/108] window_size=50, R=20, Ln=(15, 15), lambda_XY=0.075, alpha=3, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=150, rhooi_tol=1e-09
+  OK: mse=1.251349, r2=-0.042451, dir_acc=0.421822
+[43/108] window_size=50, R=20, Ln=(15, 15), lambda_XY=0.075, alpha=5, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-07
+  OK: mse=1.236602, r2=-0.030165, dir_acc=0.455849
+[44/108] window_size=50, R=20, Ln=(15, 15), lambda_XY=0.075, alpha=5, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-08
+  OK: mse=1.243178, r2=-0.035643, dir_acc=0.475534
+[45/108] window_size=50, R=20, Ln=(15, 15), lambda_XY=0.075, alpha=5, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-09
+  OK: mse=1.242593, r2=-0.035156, dir_acc=0.461192
+[46/108] window_size=50, R=20, Ln=(15, 15), lambda_XY=0.075, alpha=5, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=150, rhooi_tol=1e-07
+  OK: mse=1.249480, r2=-0.040893, dir_acc=0.447975
+[47/108] window_size=50, R=20, Ln=(15, 15), lambda_XY=0.075, alpha=5, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=150, rhooi_tol=1e-08
+  OK: mse=1.202636, r2=-0.001869, dir_acc=0.536839
+[48/108] window_size=50, R=20, Ln=(15, 15), lambda_XY=0.075, alpha=5, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=150, rhooi_tol=1e-09
+  OK: mse=1.245296, r2=-0.037408, dir_acc=0.446850
+[49/108] window_size=50, R=20, Ln=(15, 15), lambda_XY=0.075, alpha=7, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-07
+  OK: mse=1.223999, r2=-0.019667, dir_acc=0.473285
+[50/108] window_size=50, R=20, Ln=(15, 15), lambda_XY=0.075, alpha=7, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-08
+  OK: mse=1.185472, r2=0.012429, dir_acc=0.567773
+[51/108] window_size=50, R=20, Ln=(15, 15), lambda_XY=0.075, alpha=7, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-09
+  OK: mse=1.227628, r2=-0.022689, dir_acc=0.475253
+[52/108] window_size=50, R=20, Ln=(15, 15), lambda_XY=0.075, alpha=7, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=150, rhooi_tol=1e-07
+  OK: mse=1.220341, r2=-0.016619, dir_acc=0.508436
+[53/108] window_size=50, R=20, Ln=(15, 15), lambda_XY=0.075, alpha=7, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=150, rhooi_tol=1e-08
+  OK: mse=1.234071, r2=-0.028057, dir_acc=0.483127
+[54/108] window_size=50, R=20, Ln=(15, 15), lambda_XY=0.075, alpha=7, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=150, rhooi_tol=1e-09
+  OK: mse=1.224697, r2=-0.020247, dir_acc=0.474972
+[55/108] window_size=50, R=20, Ln=(20, 20), lambda_XY=0.075, alpha=3, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-07
+  OK: mse=1.202603, r2=-0.001842, dir_acc=0.520529
+[56/108] window_size=50, R=20, Ln=(20, 20), lambda_XY=0.075, alpha=3, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-08
+  OK: mse=1.218466, r2=-0.015057, dir_acc=0.513780
+[57/108] window_size=50, R=20, Ln=(20, 20), lambda_XY=0.075, alpha=3, lambda_P_penalty=0.001, lambda_Q_penalty=0.001, rhooi_n_iter_max=100, rhooi_tol=1e-09
