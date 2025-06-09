@@ -1,0 +1,38 @@
+[
+  {
+    "window_size": 50,
+    "R": 15,
+    "Ln": [
+      22,
+      22
+    ],
+    "lambda_XY": 0.075,
+    "alpha": 6,
+    "lambda_P_factor_penalty": 0.075,
+    "lambda_Q_factor_penalty": 0.075,
+    "rhooi_n_iter_max": 150,
+    "rhooi_tol": 1e-08,
+    "mse": 1.0801263121635225,
+    "r2": -0.003241614880172161,
+    "directional_accuracy": 0.49957309553173324,
+    "status": "success"
+  },
+  {
+    "window_size": 50,
+    "R": 20,
+    "Ln": [
+      22,
+      22
+    ],
+    "lambda_XY": 0.075,
+    "alpha": 6,
+    "lambda_P_factor_penalty": 0.075,
+    "lambda_Q_factor_penalty": 0.075,
+    "rhooi_n_iter_max": 150,
+    "rhooi_tol": 1e-08,
+    "mse": 1.085157998512722,
+    "r2": -0.007915139709347097,
+    "directional_accuracy": 0.4994782278721184,
+    "status": "success"
+  }
+]

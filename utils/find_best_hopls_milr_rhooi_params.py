@@ -54,15 +54,15 @@ def main():
     time_index_all = pd.to_datetime(Y_df.index[1:], format='%Y-%m')
 
     # Hyperparameter grid for hopls_milr_rhooi
-    window_sizes = [50,60]
-    R_values = [10,15,20]
-    Ln_values = [(25,25)]
+    window_sizes = [50]
+    R_values = [20]
+    Ln_values = [(5,5)]
     lambda_XY_values = [0.075]  # For lambda_X and lambda_Y
-    alpha_values = [1,3]
-    lambda_P_factor_penalty_values = [0.001]
-    lambda_Q_factor_penalty_values = [0.001]
-    rhooi_n_iter_max_values = [150]
-    rhooi_tol_values = [1e-08]
+    alpha_values = [1]
+    lambda_P_factor_penalty_values = [0.075]
+    lambda_Q_factor_penalty_values = [0.075]
+    rhooi_n_iter_max_values = [100]
+    rhooi_tol_values = [1e-07]
 
     configs = list(product(
         window_sizes, R_values, Ln_values, lambda_XY_values, alpha_values,
@@ -82,7 +82,7 @@ def main():
     results = []
     epsilon = 1e-7 # Based on provided successful runs
     test_start_percentage = 0.7 # Updated test_start_percentage
-    n_jobs_val = 7 # Defaulting to 7 as seen in notebook
+    n_jobs_val = 2 # Defaulting to 7 as seen in notebook
     rhooi_verbose_val = False # Defaulting to False for grid search
 
     print(f"Using epsilon: {epsilon}", file=log_file)

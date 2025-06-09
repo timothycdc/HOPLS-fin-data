@@ -1,0 +1,7 @@
+Starting grid search for hopls_milr_rhooi (1 combinations)...
+Using epsilon: 1e-07
+Test start percentage: 0.7
+Number of jobs for engine: 2
+Rhooi verbose: False
+\n
+[1/1] window_size=50, R=20, Ln=(5, 5), lambda_XY=0.075, alpha=1, lambda_P_penalty=0.075, lambda_Q_penalty=0.075, rhooi_n_iter_max=100, rhooi_tol=1e-07
