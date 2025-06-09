@@ -10,6 +10,14 @@ from .hopls import HOPLS as HOPLS_NEW
 from .hopls_milr_rhooi import HOPLS_MILR_RHOOI
 import torch
 
+import torch.multiprocessing as mp
+
+try:
+    mp.set_start_method('spawn', force=True)
+except RuntimeError:
+    pass # Might have been already set
+
+
 
 def hopls_predictor(
     X_tr, y_tr, X_te, R=120, Ln=(8, 8), epsilon=1e-9, print_shapes=False
