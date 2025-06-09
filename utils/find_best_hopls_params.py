@@ -52,12 +52,14 @@ def main():
     Y_all = np.nan_to_num(Y[1:, :])
     time_index_all = pd.to_datetime(Y_df.index[1:], format='%Y-%m')
 
+# [10/120] window_size=50, R=24, Ln=(25, 25), lambda=1.0, alpha=0.075
+
     # Hyperparameter grid
-    window_sizes = [50,60]
-    R_values = [24,25,26]
-    Ln_values = [(25, 25)]
-    lambda_values = [0.5, 0.75, 1.0, 1.25, 1.5 ]
-    alpha_values = [0.07, 0.075, 0.08, 0.085]
+    window_sizes = [50]
+    R_values = [24,25,26,27]
+    Ln_values = [(25, 25),(26,26),(27,27)]
+    lambda_values = [1]
+    alpha_values = [0.0725, 0.075]
     configs = list(product(window_sizes, R_values, Ln_values, lambda_values, alpha_values))
 
     # Prepare logging

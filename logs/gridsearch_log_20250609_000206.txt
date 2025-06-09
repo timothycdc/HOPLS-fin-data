@@ -1,0 +1,42 @@
+Starting grid search (24 combinations)...
+Using epsilon: 1e-08
+Test start percentage: 0.5
+
+
+[1/24] window_size=50, R=24, Ln=(25, 25), lambda=1, alpha=0.0725
+  OK: mse=0.893479, r2=-0.004675, dir_acc=0.531382
+[2/24] window_size=50, R=24, Ln=(25, 25), lambda=1, alpha=0.075
+  OK: mse=0.892186, r2=-0.003221, dir_acc=0.542565
+[3/24] window_size=50, R=24, Ln=(26, 26), lambda=1, alpha=0.0725
+  OK: mse=0.897611, r2=-0.009322, dir_acc=0.518430
+[4/24] window_size=50, R=24, Ln=(26, 26), lambda=1, alpha=0.075
+  OK: mse=0.897187, r2=-0.008845, dir_acc=0.526589
+[5/24] window_size=50, R=24, Ln=(27, 27), lambda=1, alpha=0.0725
+  OK: mse=0.889473, r2=-0.000171, dir_acc=0.540169
+[6/24] window_size=50, R=24, Ln=(27, 27), lambda=1, alpha=0.075
+  OK: mse=0.891369, r2=-0.002303, dir_acc=0.531382
+[7/24] window_size=50, R=25, Ln=(25, 25), lambda=1, alpha=0.0725
+  OK: mse=0.893287, r2=-0.004459, dir_acc=0.533037
+[8/24] window_size=50, R=25, Ln=(25, 25), lambda=1, alpha=0.075
+  OK: mse=0.892431, r2=-0.003498, dir_acc=0.539598
+[9/24] window_size=50, R=25, Ln=(26, 26), lambda=1, alpha=0.0725
+  OK: mse=0.899210, r2=-0.011120, dir_acc=0.518144
+[10/24] window_size=50, R=25, Ln=(26, 26), lambda=1, alpha=0.075
+  OK: mse=0.898504, r2=-0.010326, dir_acc=0.522196
+[11/24] window_size=50, R=25, Ln=(27, 27), lambda=1, alpha=0.0725
+  OK: mse=0.891066, r2=-0.001963, dir_acc=0.545019
+[12/24] window_size=50, R=25, Ln=(27, 27), lambda=1, alpha=0.075
+  OK: mse=0.893326, r2=-0.004503, dir_acc=0.530526
+[13/24] window_size=50, R=26, Ln=(25, 25), lambda=1, alpha=0.0725
+  OK: mse=0.894474, r2=-0.005794, dir_acc=0.533094
+[14/24] window_size=50, R=26, Ln=(25, 25), lambda=1, alpha=0.075
+  OK: mse=0.891698, r2=-0.002673, dir_acc=0.536346
+[15/24] window_size=50, R=26, Ln=(26, 26), lambda=1, alpha=0.0725
+  OK: mse=0.901022, r2=-0.013158, dir_acc=0.516604
+[16/24] window_size=50, R=26, Ln=(26, 26), lambda=1, alpha=0.075
+  OK: mse=0.900335, r2=-0.012385, dir_acc=0.521511
+[17/24] window_size=50, R=26, Ln=(27, 27), lambda=1, alpha=0.0725
+  OK: mse=0.892608, r2=-0.003696, dir_acc=0.546559
+[18/24] window_size=50, R=26, Ln=(27, 27), lambda=1, alpha=0.075
+  OK: mse=0.894436, r2=-0.005752, dir_acc=0.530925
+[19/24] window_size=50, R=27, Ln=(25, 25), lambda=1, alpha=0.0725
