@@ -71,7 +71,8 @@ def main():
 
     results = []
     epsilon = 1e-6
-    test_start_percentage = 0.75
+    test_start_percentage = 0.85
+    train_end_percentage = 0.9
     print("Using epsilon:", epsilon, file=log_file)
     print("Test start percentage:", test_start_percentage, file=log_file)
     print('\n' ,file=log_file)
@@ -83,6 +84,7 @@ def main():
                 X_all, Y_all,
                 window_size=window_size,
                 train_start = int(test_start_percentage * X_all.shape[0]),
+                train_end = int(train_end_percentage * X_all.shape[0]),
                 time_index=time_index_all
             )
             _, _, _, metrics = engine.run_window(

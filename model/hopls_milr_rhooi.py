@@ -1,9 +1,9 @@
 import torch
 import tensorly as tl
 from tensorly import tucker_to_tensor, fold
-from tensorly.decomposition import tucker # Keep this import if tucker is used elsewhere
+from tensorly.decomposition import tucker
 from tensorly.tenalg import kronecker, mode_dot, multi_mode_dot
-from tensorly.base import unfold # Explicitly import unfold
+from tensorly.base import unfold 
 from typing import List, Optional, Tuple, Union
 
 # Use PyTorch backend

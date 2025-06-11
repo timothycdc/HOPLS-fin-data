@@ -36,14 +36,14 @@ def hopls_predictor(
 
 
 def hopls_ridge_predictor(
-    X_tr, y_tr, X_te, R=120, Ln=(8, 8), epsilon=1e-9, alpha=1.0, print_shapes=False
+    X_tr, y_tr, X_te, R=120, Ln=(8, 8), epsilon=1e-9, lambda_X=1e-3, lambda_Y = 1e-3, print_shapes=False
 ):
     """
     HOPLS + Ridge predictor for a single rolling window.
     """
-    from .hopls import HOPLS_RIDGE
+    from .hopls_ridge import HOPLS_RIDGE
 
-    model = HOPLS_RIDGE(R=R, Ln=list(Ln), epsilon=epsilon, ridge=alpha)
+    model = HOPLS_RIDGE(R=R, Ln=list(Ln), epsilon=epsilon, lambda_X=lambda_X, lambda_Y=lambda_Y)
     model.fit(torch.Tensor(X_tr), torch.Tensor(y_tr))
 
     try:
@@ -376,6 +376,7 @@ class PredictionTestEngine:
         y_all: np.ndarray,
         window_size: int,
         train_start: Optional[int] = None,
+        train_end: Optional[int] = None,
         time_index: Optional[Sequence] = None,
     ):
         if X_all.ndim != 3:
@@ -390,13 +391,15 @@ class PredictionTestEngine:
         self.T, self.n_series, self.n_features = X_all.shape
         self.window_size = window_size
         self.train_start = train_start if train_start is not None else window_size
+        # set train_end boundary for rolling windows
+        self.train_end = train_end if train_end is not None else self.T
         if self.train_start < window_size:
             raise ValueError(
                 "train_start must be >= window_size to have a full initial window"
             )
         self.time_index = time_index
-        # precompute test indices once
-        self.test_indices = list(range(self.train_start, self.T))
+        # precompute test indices once, now up to train_end
+        self.test_indices = list(range(self.train_start, min(self.train_end, self.T)))
 
     def run_window(
         self,
@@ -428,6 +431,13 @@ class PredictionTestEngine:
             )
             print(
                 f"run_window: number of test windows={len(self.test_indices)}")
+            # Print test period index and date range if available
+            if self.time_index is not None and self.test_indices:
+                start_idx = self.test_indices[0]
+                end_idx = self.test_indices[-1]
+                start_date = self.time_index[start_idx]
+                end_date = self.time_index[end_idx]
+                print(f"run_window: test indices {start_idx} to {end_idx}, dates {start_date} to {end_date}")
         # map names to functions & modes
         predictor_map = {
             "hopls": hopls_predictor,
@@ -490,7 +500,7 @@ class PredictionTestEngine:
         y_pred_all = np.stack(preds, axis=0)
         y_true_all = self.y_all[self.test_indices]
         time_index_test = (
-            self.time_index[self.train_start:] if self.time_index is not None else None
+            [self.time_index[i] for i in self.test_indices] if self.time_index is not None else None
         )
 
         # compute metrics
@@ -846,3 +856,347 @@ def _print_hopls_shapes(model):
         print(f"T_mat shape: {tuple(T.shape)}, W_mat shape: {tuple(W.shape)}")
         return
     print("No HOPLS model attributes found to print shapes.")
+
+# Added imports for PyPortfolioOpt
+from pypfopt import EfficientFrontier, risk_models
+from pypfopt.hierarchical_portfolio import HRPOpt # Added for HRP
+
+def run_rolling_portfolio_backtest(
+    # Data for PredictionTestEngine & Portfolio Construction
+    X_features: np.ndarray,
+    y_returns_full: np.ndarray, # Used by engine.run_window() and for portfolio construction inputs
+    pred_engine_window_size: int,
+    asset_names: list[str],
+    hist_data_lookback: int, # Renamed from mvo_cov_lookback for generality
+
+    # Prediction Configuration
+    pred_method_name: str = "hopls",
+    pred_method_kwargs: Optional[Dict[str, Any]] = None,
+    pred_engine_train_start: Optional[int] = None,
+    pred_engine_train_end: Optional[int] = None,
+    pred_engine_time_index: Optional[Sequence] = None,
+    pred_engine_n_jobs: int = 1,
+
+    # Portfolio Construction Configuration
+    portfolio_optimizer_method: str = "mvo", # "mvo", "min_volatility", "equal_weighting", "hrp"
+    rebalance_freq: int = 1, # Renamed from mvo_rebalance_freq
+
+    # MVO Specific Configuration (used if portfolio_optimizer_method == "mvo")
+    mvo_risk_free_rate_per_period: float = 0.0,
+    mvo_target_objective: str = 'max_sharpe', # e.g., 'max_sharpe', 'min_volatility' (within MVO context), 'efficient_risk', 'efficient_return'
+    mvo_target_volatility_per_period: Optional[float] = None,
+    mvo_target_return_per_period: Optional[float] = None,
+    
+    # Common for MVO and Min_Volatility (EfficientFrontier based)
+    ef_max_asset_weight: float = 1.0, # Renamed from mvo_max_asset_weight
+    ef_min_asset_weight: float = 0.0, # Renamed from mvo_min_asset_weight
+    ef_solver: Optional[str] = None, # Renamed from mvo_solver
+    
+    rank_k: int = 10,  # Number of assets to select for simple ranking strategies
+    verbose: bool = False
+) -> pd.DataFrame:
+    """
+    Performs a rolling window portfolio backtest using a specified prediction method
+    and portfolio construction strategy.
+
+    Args:
+        X_features: 3D Numpy array of features (T, n_series, n_features) for PredictionTestEngine.
+        y_returns_full: 2D Numpy array of all historical actual returns (T, n_series).
+                        Used by PredictionTestEngine and for portfolio construction inputs.
+        pred_engine_window_size: Window size for the PredictionTestEngine.
+        asset_names: List of strings for asset names.
+        hist_data_lookback: Number of past periods of actual returns for historical data inputs
+                            (e.g., covariance matrix for MVO/MinVol, returns for HRP).
+
+        pred_method_name: Name of the prediction method to use in PredictionTestEngine.
+        pred_method_kwargs: Dictionary of keyword arguments for the prediction method.
+        pred_engine_train_start: Optional start index for training in PredictionTestEngine.
+        pred_engine_train_end: Optional end index for training in PredictionTestEngine.
+        pred_engine_time_index: Optional time index for data in PredictionTestEngine.
+        pred_engine_n_jobs: Number of parallel jobs for PredictionTestEngine's run_window.
+
+        portfolio_optimizer_method: Strategy for portfolio construction.
+                                    Options: "mvo", "min_volatility", "equal_weighting", "hrp".
+        rebalance_freq: How often to rebalance the portfolio (in periods).
+
+        mvo_risk_free_rate_per_period: Risk-free rate for MVO 'max_sharpe' (per period).
+        mvo_target_objective: MVO objective (e.g., 'max_sharpe', 'min_volatility', 'efficient_risk', 'efficient_return').
+                              Note: 'min_volatility' here is an MVO objective; for the dedicated minimum volatility
+                              portfolio without predicted returns, use portfolio_optimizer_method="min_volatility".
+        mvo_target_volatility_per_period: Target volatility for MVO 'efficient_risk'.
+        mvo_target_return_per_period: Target return for MVO 'efficient_return'.
+        
+        ef_max_asset_weight: Maximum asset weight for EfficientFrontier-based methods (MVO, MinVol).
+        ef_min_asset_weight: Minimum asset weight for EfficientFrontier-based methods (MVO, MinVol).
+        ef_solver: Solver for CVXPY used by EfficientFrontier (MVO, MinVol).
+        
+        rank_k: Number of assets to use for 'top_k' or 'long_short' strategies.
+        verbose: If True, print progress and warnings.
+
+    Returns:
+        A pandas DataFrame with portfolio returns and asset weights over the backtest period.
+    """
+
+    # 1. Instantiate PredictionTestEngine
+    if verbose:
+        print("Initializing PredictionTestEngine...")
+    # Determine training window end (defaults to end of data)
+    engine_train_end = pred_engine_train_end if pred_engine_train_end is not None else X_features.shape[0]
+    engine = PredictionTestEngine(
+        X_all=X_features,
+        y_all=y_returns_full,
+        window_size=pred_engine_window_size,
+        train_start=pred_engine_train_start,
+        train_end=engine_train_end,
+        time_index=pred_engine_time_index
+    )
+    if verbose:
+        print(f"PredictionTestEngine initialized. Train start index: {engine.train_start}, Test indices count: {len(engine.test_indices)}")
+
+    # 2. Generate predictions (expected returns for MVO, or can be ignored by other methods)
+    if verbose:
+        print(f"Running prediction method: {pred_method_name} to get expected returns (mu)...")
+    
+    predicted_returns_for_mvo, actual_returns_for_pnl, time_index_for_results, pred_metrics = engine.run_window(
+        method=pred_method_name,
+        verbose=verbose, # Pass verbose to sub-methods if they support it
+        n_jobs=pred_engine_n_jobs,
+        **(pred_method_kwargs if pred_method_kwargs else {})
+    )
+    if verbose:
+        print(f"Predictions generated. Shape: {predicted_returns_for_mvo.shape}. Metrics: {pred_metrics}")
+
+    if predicted_returns_for_mvo.size == 0:
+        if verbose:
+            print("Warning: Predictor returned no predictions. Returning empty DataFrame.")
+        cols = ['portfolio_return'] + [f'weight_{asset}' for asset in asset_names]
+        idx = time_index_for_results if time_index_for_results is not None else pd.RangeIndex(start=0, stop=0, step=1)
+        return pd.DataFrame(columns=cols, index=idx)
+
+    # 3. Portfolio Construction Core Logic
+    portfolio_construction_test_period_start_idx_in_full_data = engine.train_start # Where test period begins in y_returns_full
+
+    num_test_periods, num_assets = predicted_returns_for_mvo.shape
+    if len(asset_names) != num_assets:
+        raise ValueError("Length of asset_names must match number of assets in predicted/actual return arrays.")
+    if time_index_for_results is not None and len(time_index_for_results) != num_test_periods:
+        raise ValueError("Length of time_index_for_results must match num_test_periods.")
+
+    portfolio_log = []
+    # Initialize with equal weights as a safe default or for first period before rebalance
+    last_successful_weights = {asset: 1.0 / num_assets for asset in asset_names}
+
+    if verbose:
+        print(f"Starting rolling backtest with portfolio optimizer: {portfolio_optimizer_method}...")
+
+    for t in tqdm(range(num_test_periods), desc=f"Rolling Backtest ({portfolio_optimizer_method})", disable=not verbose):
+        current_weights = last_successful_weights # Default to previous weights if rebalance fails or not scheduled
+
+        if t % rebalance_freq == 0:
+            # Prepare historical data for covariance/HRP
+            # Data up to *before* current period t's decision point
+            hist_data_end_idx = min(portfolio_construction_test_period_start_idx_in_full_data + t, y_returns_full.shape[0])
+            hist_data_start_idx = max(0, hist_data_end_idx - hist_data_lookback)
+
+            if hist_data_start_idx < 0:
+                if verbose and t > 0: # Avoid warning at t=0 if lookback is larger than initial history
+                    print(f"  Warning (t={t}): Historical lookback extends before start of data. Using available history from index 0.")
+                hist_data_start_idx = 0
+            
+            # Default to previous weights if not enough data for the chosen method
+            perform_rebalance = True
+            if hist_data_end_idx <= hist_data_start_idx or hist_data_end_idx == 0:
+                if verbose:
+                    print(f"  Warning (t={t}): Not enough historical data (end_idx={hist_data_end_idx}, start_idx={hist_data_start_idx}). Using previous weights.")
+                perform_rebalance = False
+            if not perform_rebalance and verbose:
+                print(f"  Debug (t={t}): skip rebalance, hist_data_start_idx={hist_data_start_idx}, hist_data_end_idx={hist_data_end_idx}")
+            
+            historical_returns_for_opt_df = None
+            if perform_rebalance and portfolio_optimizer_method in ["mvo", "min_volatility", "hrp"]:
+                historical_returns_for_opt_np = y_returns_full[hist_data_start_idx:hist_data_end_idx, :]
+                historical_returns_for_opt_df = pd.DataFrame(historical_returns_for_opt_np, columns=asset_names)
+                if historical_returns_for_opt_df.shape[0] < 2 : # Min rows for cov/HRP
+                    if verbose:
+                        print(f"  Warning (t={t}): Insufficient rows ({historical_returns_for_opt_df.shape[0]}) in historical data for {portfolio_optimizer_method}. Using previous weights.")
+                    perform_rebalance = False
+
+            if perform_rebalance:
+                try:
+                    new_weights = None
+                    # Traditional optimizers
+                    if portfolio_optimizer_method == "mvo":
+                        mu_series = pd.Series(predicted_returns_for_mvo[t, :], index=asset_names)
+                        S_matrix = risk_models.sample_cov(historical_returns_for_opt_df, frequency=1)
+                        ef = EfficientFrontier(mu_series, S_matrix, weight_bounds=(ef_min_asset_weight, ef_max_asset_weight), solver=ef_solver)
+                        
+                        if mvo_target_objective == 'max_sharpe':
+                            ef.max_sharpe(risk_free_rate=mvo_risk_free_rate_per_period)
+                        elif mvo_target_objective == 'min_volatility': # MVO's own min_volatility (can use mu)
+                            ef.min_volatility()
+                        elif mvo_target_objective == 'efficient_risk':
+                            if mvo_target_volatility_per_period is None: raise ValueError("mvo_target_volatility_per_period needed for 'efficient_risk'.")
+                            ef.efficient_risk(target_volatility=mvo_target_volatility_per_period)
+                        elif mvo_target_objective == 'efficient_return':
+                            if mvo_target_return_per_period is None: raise ValueError("mvo_target_return_per_period needed for 'efficient_return'.")
+                            ef.efficient_return(target_return=mvo_target_return_per_period)
+                        else:
+                            raise ValueError(f"Unsupported mvo_target_objective: {mvo_target_objective}")
+                        new_weights = ef.clean_weights()
+
+                    elif portfolio_optimizer_method == "min_volatility":
+                        S_matrix = risk_models.sample_cov(historical_returns_for_opt_df, frequency=1)
+                        ef = EfficientFrontier(None, S_matrix, weight_bounds=(ef_min_asset_weight, ef_max_asset_weight), solver=ef_solver)
+                        ef.min_volatility() # Dedicated min volatility portfolio (mu=None)
+                        new_weights = ef.clean_weights()
+
+                    elif portfolio_optimizer_method == "hrp":
+                        hrp_opt = HRPOpt(historical_returns_for_opt_df)
+                        new_weights = hrp_opt.optimize()  # Returns a dict of weights
+                    # Simple ranking strategies
+                    elif portfolio_optimizer_method == "top_k":
+                        preds_row = predicted_returns_for_mvo[t, :]
+                        sorted_idx = np.argsort(preds_row)[::-1]
+                        top_idx = sorted_idx[:rank_k]
+                        new_weights = {asset_names[j]: 1.0/rank_k for j in top_idx}
+                    elif portfolio_optimizer_method == "long_short":
+                        preds_row = predicted_returns_for_mvo[t, :]
+                        sorted_idx = np.argsort(preds_row)
+                        bottom_idx = sorted_idx[:rank_k]
+                        top_idx = sorted_idx[::-1][:rank_k]
+                        new_weights = {}
+                        # Long top_k and short bottom_k with dollar-neutral exposure
+                        for j in top_idx:
+                            new_weights[asset_names[j]] = 0.5/rank_k
+                        for j in bottom_idx:
+                            new_weights[asset_names[j]] = -0.5/rank_k
+                    elif portfolio_optimizer_method == "equal_weighting":
+                        new_weights = {asset: 1.0 / num_assets for asset in asset_names}
+                    
+                    else:
+                        raise ValueError(f"Unsupported portfolio_optimizer_method: {portfolio_optimizer_method}")
+
+                    if new_weights: # Ensure weights were actually computed
+                        current_weights = new_weights
+                        last_successful_weights = new_weights
+
+                except ValueError as ve: # Catch config errors or PyPortfolioOpt value errors
+                    if verbose: print(f"  ValueError (t={t}) during {portfolio_optimizer_method} opt: {ve}. Using previous weights.")
+                except Exception as e: # Catch other errors like solver issues
+                    if verbose: print(f"  General error (t={t}) during {portfolio_optimizer_method} opt: {e}. Using previous weights.")
+        
+        # Calculate portfolio return for period t using actual returns for that period
+        actual_period_asset_returns = actual_returns_for_pnl[t, :]
+        portfolio_return_for_period_t = sum(current_weights.get(asset_names[j], 0) * actual_period_asset_returns[j] for j in range(num_assets))
+
+        log_entry = {'portfolio_return': portfolio_return_for_period_t}
+        for asset_name_val in asset_names:
+            log_entry[f'weight_{asset_name_val}'] = current_weights.get(asset_name_val, 0.0)
+        portfolio_log.append(log_entry)
+
+    if not portfolio_log:
+        cols = ['portfolio_return'] + [f'weight_{asset}' for asset in asset_names]
+        idx = time_index_for_results if time_index_for_results is not None else pd.RangeIndex(start=0, stop=0, step=1)
+        return pd.DataFrame(columns=cols, index=idx)
+
+    results_df = pd.DataFrame(portfolio_log)
+    if time_index_for_results is not None:
+        results_df.index = time_index_for_results
+    else:
+        results_df.index.name = 'period_index_in_test' # Or some other meaningful default
+        
+    if verbose:
+        print(f"Rolling backtest with {portfolio_optimizer_method} completed.")
+    return results_df
+
+def plot_portfolio_performance(
+    results_df: pd.DataFrame,
+    asset_names: list[str],
+    title_suffix: str = ""
+):
+    """
+    Plots the cumulative portfolio return and, optionally, asset weights over time.
+    """
+    plt.style.use('seaborn-v0_8-darkgrid') # Using a seaborn style
+
+    fig, ax1 = plt.subplots(figsize=(14, 7))
+
+    # Plot cumulative portfolio return
+    cumulative_returns = (1 + results_df['portfolio_return']).cumprod() - 1
+    ax1.plot(cumulative_returns.index, cumulative_returns, 
+             label='Cumulative Portfolio Return', color='dodgerblue', linewidth=2)
+    ax1.set_xlabel('Time')
+    ax1.set_ylabel('Cumulative Return', color='dodgerblue')
+    ax1.tick_params(axis='y', labelcolor='dodgerblue')
+    ax1.set_title(f'Portfolio Performance {title_suffix}')
+    ax1.grid(True, which='major', linestyle='--', alpha=0.7)
+    
+    # # Plot asset weights over time on a second y-axis
+    # # ax2 = ax1.twinx() 
+    # # weight_cols = [f'weight_{asset}' for asset in asset_names]
+    # # for col in weight_cols:
+    # #     ax2.plot(results_df.index, results_df[col], label=col.replace("weight_", "W: "), alpha=0.6, linestyle='--')
+    # # ax2.set_ylabel('Asset Weights', color='gray')
+    # # ax2.tick_params(axis='y', labelcolor='gray')
+    # # ax2.set_ylim(0, results_df[weight_cols].max().max() * 1.1 if not results_df[weight_cols].empty else 1) # Adjust y-limit for weights
+
+    fig.tight_layout() # otherwise the right y-label is slightly clipped
+    
+    # Combine legends if both plots were active
+    # For now, only ax1 legend is needed.
+    lines, labels = ax1.get_legend_handles_labels()
+    # if 'ax2' in locals(): # If asset weights were plotted
+    #     lines2, labels2 = ax2.get_legend_handles_labels()
+    #     ax1.legend(lines + lines2, labels + labels2, loc='upper left')
+    # else:
+    ax1.legend(lines, labels, loc='upper left')
+
+    plt.show()
+
+def backtest_from_predictions(
+    predicted_returns_for_mvo: np.ndarray,
+    actual_returns_for_pnl: np.ndarray,
+    time_index_for_results: Optional[Sequence],
+    asset_names: list[str],
+    hist_data_lookback: int,
+    portfolio_optimizer_method: str = "top_k",
+    rank_k: int = 10,
+    rebalance_freq: int = 1,
+    verbose: bool = False
+) -> pd.DataFrame:
+    """
+    Run portfolio backtest given precomputed predictions and actuals.
+    """
+    num_test_periods, num_assets = predicted_returns_for_mvo.shape
+    if len(asset_names) != num_assets:
+        raise ValueError("Length of asset_names must match number of assets.")
+    if time_index_for_results is not None and len(time_index_for_results) != num_test_periods:
+        raise ValueError("Length of time_index_for_results must match number of periods.")
+    portfolio_log = []
+    last_weights = {asset: 1.0/num_assets for asset in asset_names}
+    for t in range(num_test_periods):
+        current_weights = last_weights
+        if t % rebalance_freq == 0:
+            start_idx = max(0, t - hist_data_lookback)
+            end_idx = t
+            if end_idx - start_idx >= 2:
+                # determine new weights based on simple ranking strategies
+                preds = predicted_returns_for_mvo[t]
+                if portfolio_optimizer_method == 'top_k':
+                    top_idx = np.argsort(preds)[::-1][:rank_k]
+                    current_weights = {asset: 0.0 for asset in asset_names}
+                    for i in top_idx:
+                        current_weights[asset_names[i]] = 1.0/rank_k
+                elif portfolio_optimizer_method == 'long_short':
+                    sorted_idx = np.argsort(preds)
+                    bottom_idx = sorted_idx[:rank_k]
+                    top_idx = sorted_idx[::-1][:rank_k]
+                    current_weights = {asset: 0.0 for asset in asset_names}
+                    for i in top_idx:
+                        current_weights[asset_names[i]] = 0.5/rank_k
+                    for i in bottom_idx:
+                        current_weights[asset_names[i]] = -0.5/rank_k
+                elif portfolio_optimizer_method == 'equal_weighting':
+                    current_weights = {asset: 1.0/num_assets for asset in asset_names}
+                else:
+                    raise ValueError(f"Unsupported method: {portfolio_optimizer_method}")
