@@ -1,4 +1,4 @@
-# from https://github.com/arthurdehgan/HOPLS/blob/master/hopls.py
+# originally from https://github.com/arthurdehgan/HOPLS/blob/master/hopls.py
 
 from itertools import product
 import tensorly as tl

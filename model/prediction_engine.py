@@ -7,7 +7,7 @@ from tqdm import tqdm
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor, as_completed
 from sklearn.linear_model import Ridge
 from .hopls import HOPLS as HOPLS_NEW
-from .hopls_milr_rhooi import HOPLS_MILR_RHOOI
+from ..archive.hopls_milr_rhooi import HOPLS_MILR_RHOOI
 import torch
 
 
@@ -1116,28 +1116,55 @@ def plot_portfolio_performance(
 ):
     """
     Plots the cumulative portfolio return and, optionally, asset weights over time.
+    Also calculates and displays Sharpe Ratio and Maximum Drawdown.
     """
     plt.style.use('seaborn-v0_8-darkgrid') # Using a seaborn style
 
-    fig, ax1 = plt.subplots(figsize=(14, 7))
+    fig, ax1 = plt.subplots(figsize=(10, 5)) # Changed figsize
+
+    # Calculate portfolio returns (daily or monthly, depending on data frequency)
+    # Assuming 'portfolio_return' column contains per-period returns (not cumulative)
+    portfolio_returns = results_df['portfolio_return']
 
     # Plot cumulative portfolio return
-    cumulative_returns = (1 + results_df['portfolio_return']).cumprod() - 1
+    cumulative_returns = (1 + portfolio_returns).cumprod() - 1
     ax1.plot(cumulative_returns.index, cumulative_returns, 
              label='Cumulative Portfolio Return', color='dodgerblue', linewidth=2)
-    ax1.set_xlabel('Time')
-    ax1.set_ylabel('Cumulative Return', color='dodgerblue')
+    ax1.set_xlabel('Time', fontsize=12)
+    ax1.set_ylabel('Cumulative Return', color='dodgerblue', fontsize=12)
     ax1.tick_params(axis='y', labelcolor='dodgerblue')
-    ax1.set_title(f'Portfolio Performance {title_suffix}')
+    ax1.set_title(f'Portfolio Performance {title_suffix}', fontsize=14)
     ax1.grid(True, which='major', linestyle='--', alpha=0.7)
+
+    # Calculate Sharpe Ratio (annualized, assuming monthly returns for now, risk-free rate = 0)
+    # Adjust N if returns are daily (N=252) or other frequency
+    N = 12 # Annualization factor for monthly returns
+    sharpe_ratio = np.nan # Default to NaN if calculation is not possible
+    if not portfolio_returns.empty and portfolio_returns.std() != 0:
+        sharpe_ratio = (portfolio_returns.mean() * N) / (portfolio_returns.std() * np.sqrt(N))
+
+    # Calculate Maximum Drawdown
+    max_drawdown = np.nan # Default to NaN
+    if not cumulative_returns.empty:
+        # Calculate the running maximum
+        running_max = (cumulative_returns + 1).cummax()
+        # Calculate the drawdown
+        drawdown = (cumulative_returns + 1) / running_max - 1
+        max_drawdown = drawdown.min()
+
+    # Add Sharpe Ratio and Max Drawdown to the plot
+    stats_text = f"Annualised Sharpe Ratio: {sharpe_ratio:.2f}, Maximum Drawdown: {max_drawdown:.2%}"
+    # Position the text box. Adjust x, y, ha, va as needed for your plot.
+    ax1.text(0.02, 0.02, stats_text, transform=ax1.transAxes, fontsize=11,
+             verticalalignment='bottom', bbox=dict(boxstyle='round,pad=0.5', fc='wheat', alpha=0.5))
     
     # # Plot asset weights over time on a second y-axis
     # # ax2 = ax1.twinx() 
-    # # weight_cols = [f'weight_{asset}' for asset in asset_names]
+    # # weight_cols = [f\'weight_{asset}\' for asset in asset_names]
     # # for col in weight_cols:
-    # #     ax2.plot(results_df.index, results_df[col], label=col.replace("weight_", "W: "), alpha=0.6, linestyle='--')
-    # # ax2.set_ylabel('Asset Weights', color='gray')
-    # # ax2.tick_params(axis='y', labelcolor='gray')
+    # #     ax2.plot(results_df.index, results_df[col], label=col.replace("weight_", "W: "), alpha=0.6, linestyle=\'--\')
+    # # ax2.set_ylabel(\'Asset Weights\', color=\'gray\')
+    # # ax2.tick_params(axis=\'y\', labelcolor=\'gray\')
     # # ax2.set_ylim(0, results_df[weight_cols].max().max() * 1.1 if not results_df[weight_cols].empty else 1) # Adjust y-limit for weights
 
     fig.tight_layout() # otherwise the right y-label is slightly clipped
@@ -1145,11 +1172,11 @@ def plot_portfolio_performance(
     # Combine legends if both plots were active
     # For now, only ax1 legend is needed.
     lines, labels = ax1.get_legend_handles_labels()
-    # if 'ax2' in locals(): # If asset weights were plotted
+    # if \'ax2\' in locals(): # If asset weights were plotted
     #     lines2, labels2 = ax2.get_legend_handles_labels()
-    #     ax1.legend(lines + lines2, labels + labels2, loc='upper left')
+    #     ax1.legend(lines + lines2, labels + labels2, loc=\'upper left\')
     # else:
-    ax1.legend(lines, labels, loc='upper left')
+    ax1.legend(lines, labels, loc='upper left', fontsize=11)
 
     plt.show()
 

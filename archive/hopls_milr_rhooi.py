@@ -1,3 +1,7 @@
+#------------ NOTE: -------------------#
+# This code is an unreleased work of HOPLS-MILR-RHOOI.
+# It is not part of the FYP. It is too comple and has numerical issues
+
 import torch
 import tensorly as tl
 from tensorly import tucker_to_tensor, fold
@@ -477,39 +481,13 @@ class HOPLS_MILR_RHOOI:
             G_r = G_r_LS / (1.0 + self.lambda_X * W_G_r).clamp(min=self.epsilon)
             G_r_list_accum.append(G_r)
 
-            # Calculate d_r (scalar Y coefficient) using LS formula with RHOOI-Orth q_r and t_r
-            # The core for Y (matrix Y case) is a scalar d_r.
-            # It corresponds to contracting Y with t_r^T and q_r^T.
-            # Y (I1, M) x_0 t_r^T (1, I1) x_1 q_r^T (1, M) = scalar
-            # But the HOPLS2 deflation uses d_r * t_r * q_r^T.
-            # d_r is the scalar coefficient such that Y_hat = Sum d_r t_r q_r^T.
-            # For a single component, Y_approx = d_r t_r q_r^T.
-            # min ||Y_r - d_r t_r q_r^T||_F^2 w.r.t d_r (t_r, q_r fixed)
-            # d_r = (t_r^T Y_r q_r) / (t_r^T t_r * q_r^T q_r)
-            # Since t_r and q_r are unit norm: d_r = t_r^T Y_r q_r
             u_r_vec = Fr_mat @ q_r # (I1, M) @ (M, 1) -> (I1, 1)
             d_r_LS = (t_r.T @ u_r_vec).squeeze() # (1, I1) @ (I1, 1) -> scalar
             
             # Apply standard Ridge penalty to the scalar d_r
-            # This is equivalent to MILR on a scalar core, which gets weight 1.0.
             d_r = d_r_LS / (1.0 + self.lambda_Y) # Lambda_Y applies to d_r (the core of Y)
             d_r_list_accum.append(d_r.reshape(1)) # Store as (1,) tensor
 
-            # Calculate W_r for prediction
-            # W_r is the weight vector such that t_r = X_mat @ W_r
-            # t_r = G_r x_1 t_r x_2 P_r(1) ... => t_r = t_r * (G_r x_2 P_r(1) ... )_mode_0_contracted? No.
-            # From the HOPLS paper (Prop 3.1 and following): X approx = sum( G_r x_1 t_r x_2 P_r ... )
-            # Deflation: E_{r+1} = E_r - G_r x_1 t_r x_2 P_r ...
-            # Total X = sum( G_r x_1 t_r x_2 P_r ... ) + E_R+1
-            # If E_R+1 is small, X approx = sum( G_r x_1 t_r x_2 P_r ... )
-            # X_mat = T_mat @ W_mat
-            # W_mat should transform X_mat into T_mat.
-            # From the original code's W_r calculation:
-            # W_r = P_kron @ G_r_vec_pinv
-            # G_r_vec_pinv is pinv(vec(G_r).T) = pinv((1, L2..LN).reshape(1, prod(L)))
-            # This seems related to t_r = Y_tilde @ vec(G_r^C)^+ from original HOPLS2 paper, but using G_r instead of G_r^C.
-            # Let's replicate the original W_r calculation logic, assuming it's correct for prediction.
-            
             G_r_mat = unfold(G_r, mode=0) # Shape (1, L2*...*LN)
             
             if P_r_current_comp: # If X has feature modes (N > 1)
@@ -620,26 +598,11 @@ class HOPLS_MILR_RHOOI:
             ranks_for_Cr_RHOOI = self.actual_Ln_used + self.actual_Km_used
             penalties_for_Cr_RHOOI = [self.lambda_P_factor_penalty] * self.N_modal_X + [self.lambda_Q_factor_penalty] 
             
-            # Handle scalar Cr case (X vector N=1, Y vector M=1) - Should be caught by Y.ndim check
-            # Handle X vector N=1, Y tensor M>1 case: Cr shape (J2..JM). N_modal_X = 0, M_modal_Y > 0.
-            # Ranks for Cr: Km_used ([K2..KM]). Penalties: [lambda_Q]*M_modal_Y.
-            # RHOOI returns core(K2..KM) and factors [Q(1)..Q(M-1)].
-            # This doesn't fit the HOPLS structure where the core is related to G and D, not C.
-            # The HOPLS Tensor-Tensor algorithm finds P's and Q's from C, but G and D cores *separately*.
-            # The core from C decomposition _Gr_C_dummy is only used to derive t_r in Tensor-Matrix.
-            # In Tensor-Tensor, t_r is derived from SVD of projected X (Eq 17).
-            
-            # Let's revert to the original HOPLS Tensor-Tensor algorithm step 2.3 for t_r:
-            # t_r is leading left singular vector of ((Er x_2 P .. x_N P))_(1).
-            # This implies P_r are obtained from C_r decomposition first.
 
             # RHOOI on Cr (I2..IN, J2..JM) yields P(1)..P(N-1) and Q(1)..Q(M-1) and core_C
             
-            if Cr.ndim == 0: # X vector, Y vector case - already handled by Y.ndim check?
-                 # If Y.ndim > 2, it's a tensor. Cr.ndim = N_modal_X + M_modal_Y.
-                 # Cr.ndim can be 0 if N_modal_X=0 and M_modal_Y=0, meaning X vector, Y vector.
-                 # This case should have gone to _fit_tensor_X_matrix_Y because Y.ndim == 2 (1 column).
-                 # This branch should not be reached if Y.ndim >= 2 logic is correct. Defensive break.
+            if Cr.ndim == 0: # X vector, Y vector case 
+
                  if self.rhooi_verbose: print("Error: Reached unexpected scalar Cr state in Tensor-Tensor path.")
                  break # Should not happen
             
